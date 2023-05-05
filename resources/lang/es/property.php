@@ -1,4 +1,5 @@
 <?php
+
 return [
     'properties' => 'Propiedades',
     'properties_list' => 'Lista de propiedades',

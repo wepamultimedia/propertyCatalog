@@ -2,9 +2,7 @@
 
 namespace Wepa\PropertyCatalog\Http\Requests;
 
-
 use Illuminate\Foundation\Http\FormRequest;
-
 
 class PropertyRequest extends FormRequest
 {
@@ -17,7 +15,7 @@ class PropertyRequest extends FormRequest
     {
         return true;
     }
-    
+
     /**
      * Get the validation rules that apply to the request.
      *

@@ -4,7 +4,6 @@ namespace Wepa\PropertyCatalog\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 class CategoryResource extends JsonResource
 {
     /**
@@ -16,16 +15,16 @@ class CategoryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->when((bool) $this->id, function (){
+            'id' => $this->when((bool) $this->id, function () {
                 return $this->id;
             }),
             'name' => $this->name,
             'description' => $this->description,
             'published' => $this->published,
-            'seo' =>  $this->seo,
-            'translations' => $this->when($request->routeIs('*admin*.edit'), function(){
+            'seo' => $this->seo,
+            'translations' => $this->when($request->routeIs('*admin*.edit'), function () {
                 return $this->getTranslationsArray();
-            })
+            }),
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Wepa\PropertyCatalog\Database\Factories;
 
-
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -12,17 +11,16 @@ use Wepa\PropertyCatalog\Models\Category;
 use Wepa\PropertyCatalog\Models\Property;
 use Wepa\PropertyCatalog\Models\PropertyImage;
 
-
 class PropertyFactory extends Factory
 {
     protected $model = Property::class;
-    
+
     public function configure()
     {
         return $this->afterMaking(function (Property $property) {
             $category = Category::inRandomOrder()->first();
             $property->category_id = $category->id;
-            
+
             $seo = Seo::create([
                 'package' => 'property-catalog',
                 'controller' => PropertyController::class,
@@ -32,20 +30,21 @@ class PropertyFactory extends Factory
                 'description' => $property->summary,
             ]);
             $property->seo_id = $seo->id;
-            
+
         })->afterCreating(function (Property $property) {
             $seo = Seo::where(['id' => $property->seo_id])->first();
             $seo->update(['route_params' => ['property' => $property->id]]);
-            
+
             $property->update(['position' => Property::nextPosition()]);
-            
+
             PropertyImage::factory(5)->create(['property_id' => $property->id]);
         });
     }
-    
+
     public function definition()
     {
         $price = rand(100000, 800000);
+
         return [
             'name' => $name = $this->faker->name,
             'summary' => $this->faker->sentence,
@@ -59,4 +58,3 @@ class PropertyFactory extends Factory
         ];
     }
 }
-

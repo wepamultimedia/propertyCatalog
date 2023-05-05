@@ -3,14 +3,11 @@
 namespace Wepa\PropertyCatalog\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Wepa\PropertyCatalog\PropertyCatalogServiceProvider;
 
 class TestCase extends Orchestra
 {
-    
-    
     protected function setUp(): void
     {
         parent::setUp();

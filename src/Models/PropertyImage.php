@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
 use Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory;
 
-
 /**
  * Wepa\PropertyCatalog\Models\PropertyImage
  *
@@ -22,6 +21,7 @@ use Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory;
  * @property-read \Wepa\PropertyCatalog\Models\PropertyImageTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Wepa\PropertyCatalog\Models\PropertyImageTranslation> $translations
  * @property-read int|null $translations_count
+ *
  * @method static \Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyImage listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyImage newModelQuery()
@@ -40,6 +40,7 @@ use Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyImage whereTranslation(string $translationField, $value, ?string $locale = null, string $method = 'whereHas', string $operator = '=')
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyImage whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyImage withTranslation()
+ *
  * @mixin \Eloquent
  */
 class PropertyImage extends Model
@@ -47,25 +48,26 @@ class PropertyImage extends Model
     use HasFactory;
     use PositionModelTrait;
     use Translatable;
-    
+
     protected $table = 'procat_properties_images';
-    
+
     public $timestamps = false;
-    
+
     public array $translatedAttributes = ['image_alt'];
+
     public $translationForeignKey = 'image_id';
-    
+
     protected $fillable = [
         'property_id',
         'image_url',
-        'position'
+        'position',
     ];
-    
+
     protected static function newFactory(): PropertyImageFactory
     {
         return PropertyImageFactory::new();
     }
-    
+
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class, 'id', 'property_id');

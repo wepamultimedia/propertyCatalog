@@ -24,13 +24,13 @@ return new class extends Migration
             $table->boolean('highlighted')->default(false);
             $table->integer('position');
             $table->timestamps();
-    
+
             $table->foreign('category_id')
                 ->references('id')
                 ->on('procat_categories')
                 ->onDelete('cascade');
         });
-    
+
         Schema::create('procat_properties_translations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -38,10 +38,10 @@ return new class extends Migration
             $table->string('cover_alt');
             $table->text('data_sheet');
             $table->string('locale')->index();
-            
+
             $table->foreignId('property_id');
             $table->unique(['locale', 'property_id'], 'procat_protra_locale_property_id_unique');
-    
+
             $table->foreign('property_id')
                 ->references('id')
                 ->on('procat_properties')

@@ -2,7 +2,6 @@
 
 namespace Wepa\PropertyCatalog\Models;
 
-
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +12,6 @@ use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
 use Wepa\Core\Models\Seo;
 use Wepa\PropertyCatalog\Database\Factories\PropertyFactory;
 use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
-
 
 /**
  * Wepa\PropertyCatalog\Models\Property
@@ -37,6 +35,7 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property-read \Wepa\PropertyCatalog\Models\PropertyTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Wepa\PropertyCatalog\Models\PropertyTranslation> $translations
  * @property-read int|null $translations_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Property listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
@@ -58,6 +57,7 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property withTranslation()
+ *
  * @mixin \Eloquent
  */
 class Property extends Model
@@ -65,10 +65,11 @@ class Property extends Model
     use HasFactory;
     use Translatable;
     use PositionModelTrait;
-    
-    
+
     public array $translatedAttributes = ['name', 'summary', 'data_sheet', 'cover_alt'];
+
     public $translationForeignKey = 'property_id';
+
     protected $fillable = [
         'seo_id',
         'position',
@@ -77,20 +78,21 @@ class Property extends Model
         'offer_price',
         'published',
         'highlighted',
-        'cover'
+        'cover',
     ];
+
     protected $table = 'procat_properties';
-    
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
-    
+
     public function images(): HasMany
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
     }
-    
+
     public function seo(): HasOne
     {
         return $this->hasOne(Seo::class, 'id', 'seo_id')
@@ -99,7 +101,7 @@ class Property extends Model
                 'action' => 'show',
             ]);
     }
-    
+
     protected static function newFactory()
     {
         return PropertyFactory::new();

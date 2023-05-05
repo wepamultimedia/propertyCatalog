@@ -1,4 +1,5 @@
 <?php
+
 return [
     'categories' => 'Categorías',
     'categories_list' => 'Lista de categorías',

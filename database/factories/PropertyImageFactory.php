@@ -2,23 +2,20 @@
 
 namespace Wepa\PropertyCatalog\Database\Factories;
 
-
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Wepa\PropertyCatalog\Models\Property;
 use Wepa\PropertyCatalog\Models\PropertyImage;
-
 
 class PropertyImageFactory extends Factory
 {
     protected $model = PropertyImage::class;
-    
+
     public function configure()
     {
         return $this->afterCreating(function (PropertyImage $image) {
             $image->update(['position' => PropertyImage::nextPosition(['property_id' => $image->property_id])]);
         });
     }
-    
+
     public function definition()
     {
         return [
@@ -28,4 +25,3 @@ class PropertyImageFactory extends Factory
         ];
     }
 }
-
