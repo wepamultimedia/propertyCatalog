@@ -26,8 +26,8 @@ class PropertyRequest extends FormRequest
         return [
             'price' => 'string|nullable',
             'offer_price' => 'string|nullable',
-            'published' => 'required|boolean',
-            'highlighted' => 'required|boolean',
+            'published' => 'nullable|boolean',
+            'highlighted' => 'nullable|boolean',
             'category_id' => 'required|numeric',
             'translations.*.name' => 'required|string',
             'translations.*.summary' => 'required|string',
