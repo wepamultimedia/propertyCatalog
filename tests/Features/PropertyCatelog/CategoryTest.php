@@ -2,20 +2,16 @@
 
 namespace Tests\Feature\PropertyCatalog;
 
-
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Wepa\Core\Models\Seo;
 use Wepa\PropertyCatalog\Models\Category;
 use Wepa\PropertyCatalog\Models\CategoryTranslation;
-
 
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
-    
-    
+
     public function test_store()
     {
         $user = User::factory()->create();
@@ -29,13 +25,13 @@ class CategoryTest extends TestCase
             'seo' => (new Category())->seo(),
             'position' => 1,
         ]);
-        
+
         $this->assertDatabaseHas(Category::class, ['position' => 1, 'published' => true]);
         $this->assertDatabaseHas(CategoryTranslation::class, ['category_id' => 1, 'name' => 'Test Category']);
-        
+
         $response->assertRedirectToRoute('admin.property_catalog.categories.index');
     }
-    
+
     //    public function test_update()
     //    {
     //        $user = User::factory()->create();
