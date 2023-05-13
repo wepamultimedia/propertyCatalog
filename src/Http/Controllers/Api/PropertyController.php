@@ -14,14 +14,14 @@ class PropertyController extends Controller
         return PropertyResource::collection(
             Property::where('highlighted', true)
                 ->where('published', true)
-                ->orderBy('position')
+                ->orderBy('position', 'desc')
                 ->get());
     }
 
     public function index(): AnonymousResourceCollection
     {
         return PropertyResource::collection(
-            Property::orderBy('position')
+            Property::orderBy('position', 'desc')
                 ->where('published', true)
                 ->get());
     }

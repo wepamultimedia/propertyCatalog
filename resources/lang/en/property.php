@@ -23,4 +23,11 @@ return [
     'delete_title' => 'Delete property',
     'delete_message' => 'Are you sure you want to delete the property?',
     'category_name' => 'Category',
+    'video_cover' => 'Video cover',
+    'prices' => 'Prices',
+    'add_price' => 'Add price',
+    'delete_price_title' => 'Delete price',
+    'delete_price_message' => 'Are you sure you want to delete the price?',
+    'price_info' => 'Prices are subject to change without notice',
+    
 ];

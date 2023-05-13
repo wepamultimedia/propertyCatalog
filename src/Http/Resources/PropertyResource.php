@@ -19,12 +19,12 @@ class PropertyResource extends JsonResource
                 return $this->id;
             }),
             'name' => $this->name,
-            'price' => $this->price,
-            'offer_price' => $this->offer_price,
             'position' => $this->position,
             'published' => $this->published,
             'highlighted' => $this->highlighted,
             'summary' => $this->summary,
+            'delivery' => $this->delivery,
+            'video_cover' => $this->video_cover,
             'cover' => $this->cover,
             'cover_alt' => $this->cover_alt,
             'category_id' => $this->category_id,
@@ -35,6 +35,7 @@ class PropertyResource extends JsonResource
             'images' => $this->when(! $request->routeIs('*admin*'), function () {
                 return PropertyImageResource::collection($this->images);
             }),
+            'prices' => $this->prices,
             'translations' => $this->when($request->routeIs('*admin*.edit'), function () {
                 return $this->getTranslationsArray();
             }),

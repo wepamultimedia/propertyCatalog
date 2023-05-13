@@ -30,7 +30,7 @@ import Icon from "@core/Components/Heroicon.vue";
 import Flap from "@core/Components/Flap.vue";
 import { useStore } from "vuex";
 
-const props = defineProps(["property", "categories", "images", "errors"]);
+const props = defineProps(["property", "categories", "images", "prices", "errors"]);
 
 const values = reactive({
     name: null,
@@ -94,6 +94,58 @@ const imageGallery = reactive({
         property_id: null,
         image_url: null,
         image_alt: null,
+        translations: {}
+    })
+});
+
+const pricesForm = reactive({
+    flap: false,
+    type: "",
+    store: () => {
+        pricesForm.form.post(route("admin.property_catalog.prices.store"), {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                pricesForm.close();
+            }
+        });
+    },
+    update: () => {
+        pricesForm.form.put(route("admin.property_catalog.prices.update", {price : pricesForm.form.id}), {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                pricesForm.close();
+            }
+        });
+    },
+    create: () => {
+        pricesForm.flap = true;
+        pricesForm.type = "create";
+    },
+    edit: price => {
+        pricesForm.form.id = price.id;
+        pricesForm.form.price = price.price;
+        pricesForm.form.translations = price.translations;
+
+        pricesForm.flap = true;
+        pricesForm.type = "edit";
+    },
+    reset: () => {
+        pricesForm.type = "";
+        pricesForm.form.id = null;
+        pricesForm.form.price = null;
+        pricesForm.form.translations = {};
+    },
+    close: () => {
+        pricesForm.flap = false;
+        pricesForm.type = null;
+        pricesForm.reset();
+    },
+    form: useForm({
+        id: null,
+        property_id: form.id,
+        price: null,
         translations: {}
     })
 });
@@ -167,7 +219,7 @@ const submit = () => {
                             <label class="text-sm">{{ __("highlighted") }}</label>
                             <ToggleButton v-model="form.highlighted"/>
                         </div>
-                        <div>
+                        <div class="mb-6">
                             <Select v-model="form.category_id"
                                     :errors="errors"
                                     :label="__('select_category')"
@@ -177,9 +229,23 @@ const submit = () => {
                                     reduce
                                     required></Select>
                         </div>
+                        <div class="mb-6">
+                            <Input v-model="form"
+                                   v-model:locale="selectedLocale"
+                                   :errors="errors"
+                                   :label="__('delivery')"
+                                   name="delivery"
+                                   translation/>
+                        </div>
                     </div>
                     <!-- cover -->
                     <div class="p-6">
+                        <div class="mb-6">
+                            <Input v-model="form"
+                                   :errors="errors"
+                                   :label="__('video_cover')"
+                                   name="video_cover"/>
+                        </div>
                         <div class="sm:w-1/2 lg:w-full mb-6">
                             <InputImage v-model="form.cover"
                                         v-model:alt="values.cover_alt"
@@ -208,6 +274,62 @@ const submit = () => {
             </div>
         </section>
     </form>
+    <!-- Prices -->
+    <section class="my-8">
+        <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-6">
+            <span class="text-skin-base font-medium text-lg">{{ __("prices") }}</span>
+            <button class="btn btn-secondary"
+                    @click="pricesForm.create">{{ __("add_price") }}
+            </button>
+        </div>
+        <div class="text-skin-base
+                    border
+                    overflow-hidden
+                    dark:border-gray-600
+                    bg-white dark:bg-gray-600
+                    rounded-lg
+                    shadow">
+            <Table :columns="['name', 'price', 'position']"
+                   :data="prices.data"
+                   :delete-message="__('delete_price_message')"
+                   :delete-title="__('delete_price_title')"
+                   delete-route="admin.property_catalog.prices.destroy"
+                   divide-x
+                   edit-route="admin.property_catalog.prices.edit"
+                   even>
+                <template #col-content-position="{item}">
+                    <div class="flex items-center justify-start">
+                        <div class="inline-flex"
+                             role="group">
+                            <button class="rounded-l-lg px-1 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-0 active:bg-gray-800 transition duration-150 ease-in-out"
+                                    type="button"
+                                    @click="imageGallery.position(item, item.position - 1)">
+                                <Icon class="m-0 fill-white h-4 w-4"
+                                      icon="chevron-up"></Icon>
+                            </button>
+                            <span class="px-2 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase"
+                                  type="button">
+                                {{ item.position }}
+                            </span>
+                            <button class="rounded-r-lg px-1 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-0 active:bg-gray-800 transition duration-150 ease-in-out"
+                                    type="button"
+                                    @click="imageGallery.position(item, item.position + 1)">
+                                <Icon class="m-0 fill-white h-4 w-4"
+                                      icon="chevron-down"></Icon>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+                <template #action-edit="{item}">
+                    <button class="w-8 h-6"
+                            @click="pricesForm.edit(item)">
+                        <icon class="fill-skin-base w-5 h-5"
+                              icon="pencil-alt"></icon>
+                    </button>
+                </template>
+            </Table>
+        </div>
+    </section>
     <!-- Gallery -->
     <section class="my-8">
         <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-6">
@@ -228,10 +350,10 @@ const submit = () => {
                     shadow">
             <Table :columns="['image_url', 'image_alt', 'position']"
                    :data="images"
+                   :delete-message="__('delete_image_message')"
+                   :delete-title="__('delete_image_title')"
                    delete-route="admin.property_catalog.images.destroy"
                    divide-x
-                   :delete-title="__('delete_image_title')"
-                   :delete-message="__('delete_image_message')"
                    edit-route="admin.property_catalog.images.edit"
                    even>
                 <template #col-content-image_url="{item}">
@@ -286,6 +408,65 @@ const submit = () => {
                  article-type="blog_entry"
                  page-type="article"/>
     </section>
+    <!-- Prices flap -->
+    <Flap v-model="pricesForm.flap"
+          :on-close="pricesForm.close"
+          close-background
+          md>
+        <form v-if="pricesForm.type === 'create'"
+              class="pb-8"
+              @submit.prevent="pricesForm.store">
+            <h2>{{ __("add_price") }}</h2>
+            <div class="my-6">
+                <Input v-model="pricesForm.form"
+                       v-model:locale="selectedLocale"
+                       :errors="errors"
+                       :label="__('name')"
+                       autofocus
+                       name="name"
+                       required
+                       translation/>
+            </div>
+            <div class="my-6">
+                <Input v-model="pricesForm.form"
+                       v-model:locale="selectedLocale"
+                       :errors="errors"
+                       :label="__('price')"
+                       name="price"
+                       required/>
+            </div>
+            <div class="rounded-b-lg ">
+                <SaveFormButton :form="pricesForm.form"/>
+            </div>
+        </form>
+        <form v-if="pricesForm.type === 'edit'"
+              class="pb-8"
+              @submit.prevent="pricesForm.update">
+            <h2>{{ __("edit_price") }}</h2>
+            <div class="my-6">
+                <Input v-model="pricesForm.form"
+                       v-model:locale="selectedLocale"
+                       :errors="errors"
+                       :label="__('name')"
+                       autofocus
+                       name="name"
+                       required
+                       translation/>
+            </div>
+            <div class="my-6">
+                <Input v-model="pricesForm.form"
+                       v-model:locale="selectedLocale"
+                       :errors="errors"
+                       :label="__('price')"
+                       name="price"
+                       required/>
+            </div>
+            <div class="rounded-b-lg ">
+                <SaveFormButton :form="pricesForm.form"/>
+            </div>
+        </form>
+    </Flap>
+    <!-- Image gallery flap -->
     <Flap v-model="imageGallery.flap"
           :on-close="imageGallery.close"
           close-background
@@ -294,8 +475,8 @@ const submit = () => {
               @submit.prevent="imageGallery.update">
             <figure>
                 <img :src="imageGallery.form.image_url"
-                     class="w-full"
-                     alt="">
+                     alt=""
+                     class="w-full">
             </figure>
             <div class="my-6">
                 <Input v-model="imageGallery.form"

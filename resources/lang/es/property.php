@@ -23,4 +23,13 @@ return [
     'delete_title' => 'Borrar propiedad',
     'delete_message' => '¿Esta seguro de que desea borrar la propiedad?',
     'category_name' => 'Categoría',
+    'delivery' => 'Entrega',
+    'video_cover' => 'Video de portada',
+    'prices' => 'Precios',
+    'add_price' => 'Añadir precio',
+    'delete_price_title' => 'Borrar precio',
+    'delete_price_message' => '¿Esta seguro de que desea borrar el precio?',
+    'photos' => 'Galería de fotos',
+    'price_info' => 'Los precios están sujetos a cambios sin previo aviso',
+    
 ];

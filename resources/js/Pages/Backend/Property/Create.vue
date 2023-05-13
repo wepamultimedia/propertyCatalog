@@ -6,7 +6,7 @@ export default {
         title: "properties",
         bc: [
             {
-                label: "property_catalog",
+                label: "properties",
                 route: "admin.property_catalog.properties.index"
             }, {label: "create"}
         ]
@@ -113,7 +113,7 @@ const submit = () => {
                             <label class="text-sm">{{ __("highlighted") }}</label>
                             <ToggleButton v-model="form.highlighted"/>
                         </div>
-                        <div>
+                        <div class="mb-6">
                             <Select v-model="form.category_id"
                                     :errors="errors"
                                     :label="__('select_category')"
@@ -123,9 +123,23 @@ const submit = () => {
                                     reduce
                                     required></Select>
                         </div>
+                        <div>
+                            <Input v-model="form"
+                                   v-model:locale="selectedLocale"
+                                   :errors="errors"
+                                   :label="__('delivery')"
+                                   name="delivery"
+                                   translation/>
+                        </div>
                     </div>
                     <!-- cover -->
                     <div class="p-6">
+                        <div class="mb-6">
+                            <Input v-model="form"
+                                   :errors="errors"
+                                   :label="__('video_cover')"
+                                   name="video_cover"/>
+                        </div>
                         <div class="sm:w-1/2 lg:w-full mb-6">
                             <InputImage v-model="form.cover"
                                         v-model:alt="values.cover_alt"

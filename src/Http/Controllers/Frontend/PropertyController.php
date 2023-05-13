@@ -2,51 +2,22 @@
 
 namespace Wepa\PropertyCatalog\Http\Controllers\Frontend;
 
+
+use Cookie;
 use Illuminate\Http\Request;
 use Inertia\Response;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Wepa\Core\Http\Controllers\Frontend\InertiaController;
-use Wepa\PropertyCatalog\Http\Requests\PropertyRequest;
 use Wepa\PropertyCatalog\Http\Resources\CategoryResource;
 use Wepa\PropertyCatalog\Http\Resources\PropertyResource;
 use Wepa\PropertyCatalog\Models\Category;
 use Wepa\PropertyCatalog\Models\Property;
 
+
 class PropertyController extends InertiaController
 {
     public string $packageName = 'property-catalog';
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
+    
     public function index(Request $request): Response
     {
         $properties = Property::where('published', true)
@@ -58,53 +29,45 @@ class PropertyController extends InertiaController
             })
             ->orderBy('position', 'desc')
             ->paginate();
-
+        
         $properties = PropertyResource::collection($properties);
         $category = null;
-
+        
         if ($request->exists('category_id')) {
             $category = CategoryResource::make(Category::find($request->category_id));
         }
-
+        
         $categories = CategoryResource::collection(Category::orderBy('position')
             ->where('published', true)
             ->get());
-
+        
         return $this->render('Vendor/PropertyCatalog/Frontend/Property/Index', ['category', 'property'],
             compact(['properties', 'categories', 'category']));
     }
-
+    
     /**
-     * Display the specified resource.
+     * @param  Property  $property
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function show($id)
+    public function show(Property $property): Response
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(PropertyRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(PropertyRequest $request, $id)
-    {
-        //
+        $CrawlerDetect = new CrawlerDetect;
+        
+        $isCrawler = $CrawlerDetect->isCrawler();
+        
+        $categories = CategoryResource::collection(Category::orderBy('position')
+            ->where('published', true)
+            ->get());
+        
+        $register = true;
+        if (Cookie::get('registeredLead')) {
+            $register = false;
+        }
+        
+        $property = PropertyResource::make($property);
+        
+        return $this->render('Vendor/PropertyCatalog/Frontend/Property/Show', ['category', 'property'],
+            compact(['property', 'categories', 'isCrawler', 'register']));
     }
 }

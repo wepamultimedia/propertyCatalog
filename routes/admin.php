@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\CategoryController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyImageController;
+use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyPriceController;
+
 
 Route::get('/test', [CategoryController::class, 'test'])->name('test');
 Route::prefix('admin/property-catalog')
@@ -35,4 +37,11 @@ Route::prefix('admin/property-catalog')
 
         Route::put('properties/images/position/{image}/{position}', [PropertyImageController::class, 'position'])
             ->name('admin.property_catalog.images.position');
+        
+        // Properties prices
+        Route::resource('properties/prices', PropertyPriceController::class)
+            ->names('admin.property_catalog.prices');
+    
+        Route::put('properties/prices/position/{price}/{position}', [PropertyPriceController::class, 'position'])
+            ->name('admin.property_catalog.prices.position');
     });

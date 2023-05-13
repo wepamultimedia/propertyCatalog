@@ -21,11 +21,11 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property int $category_id
  * @property string $name
  * @property string $summary
+ * @property string $delivery
+ * @property string $video_cover
  * @property string $data_sheet
  * @property string $cover
  * @property string $cover_alt
- * @property float|null $price
- * @property float|null $offer_price
  * @property int $published
  * @property int $position
  * @property array $images
@@ -66,7 +66,7 @@ class Property extends Model
     use Translatable;
     use PositionModelTrait;
 
-    public array $translatedAttributes = ['name', 'summary', 'data_sheet', 'cover_alt'];
+    public array $translatedAttributes = ['name', 'summary', 'delivery', 'data_sheet', 'cover_alt'];
 
     public $translationForeignKey = 'property_id';
 
@@ -74,11 +74,10 @@ class Property extends Model
         'seo_id',
         'position',
         'category_id',
-        'price',
-        'offer_price',
         'published',
         'highlighted',
         'cover',
+        'video_cover'
     ];
 
     protected $table = 'procat_properties';
@@ -91,6 +90,11 @@ class Property extends Model
     public function images(): HasMany
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
+    }
+    
+    public function prices(): HasMany
+    {
+        return $this->hasMany(PropertyPrice::class, 'property_id', 'id')->orderBy('position');
     }
 
     public function seo(): HasOne
