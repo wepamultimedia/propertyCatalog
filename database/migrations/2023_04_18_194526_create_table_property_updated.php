@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('published')->nullable()->default(true)->change();
             $table->boolean('highlighted')->nullable()->default(false)->change();
         });
-        
+
         Schema::table('procat_properties_translations', function (Blueprint $table) {
             $table->string('delivery')->nullable();
         });
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->boolean('highlighted')->nullable(false)->default(false)->change();
             $table->dropColumn('video_cover');
         });
-        
+
         Schema::table('procat_properties_translations', function (Blueprint $table) {
             $table->removeColumn('delivery');
         });
