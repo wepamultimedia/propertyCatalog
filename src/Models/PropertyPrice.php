@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
-use Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory;
-
 
 /**
  * Wepa\PropertyCatalog\Models\PropertyPrice
@@ -22,6 +20,7 @@ use Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory;
  * @property-read \Wepa\PropertyCatalog\Models\PropertyPriceTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Wepa\PropertyCatalog\Models\PropertyPriceTranslation> $translations
  * @property-read int|null $translations_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyPrice listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyPrice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyPrice newQuery()
@@ -39,6 +38,7 @@ use Wepa\PropertyCatalog\Database\Factories\PropertyImageFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyPrice whereTranslation(string $translationField, $value, ?string $locale = null, string $method = 'whereHas', string $operator = '=')
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyPrice whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|PropertyPrice withTranslation()
+ *
  * @mixin \Eloquent
  */
 class PropertyPrice extends Model

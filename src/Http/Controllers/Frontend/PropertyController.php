@@ -2,7 +2,6 @@
 
 namespace Wepa\PropertyCatalog\Http\Controllers\Frontend;
 
-
 use Cookie;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -13,11 +12,10 @@ use Wepa\PropertyCatalog\Http\Resources\PropertyResource;
 use Wepa\PropertyCatalog\Models\Category;
 use Wepa\PropertyCatalog\Models\Property;
 
-
 class PropertyController extends InertiaController
 {
     public string $packageName = 'property-catalog';
-    
+
     public function index(Request $request): Response
     {
         $properties = Property::where('published', true)
@@ -29,27 +27,22 @@ class PropertyController extends InertiaController
             })
             ->orderBy('position', 'desc')
             ->paginate();
-        
+
         $properties = PropertyResource::collection($properties);
         $category = null;
-        
+
         if ($request->exists('category_id')) {
             $category = CategoryResource::make(Category::find($request->category_id));
         }
-        
+
         $categories = CategoryResource::collection(Category::orderBy('position')
             ->where('published', true)
             ->get());
-        
+
         return $this->render('Vendor/PropertyCatalog/Frontend/Property/Index', ['category', 'property'],
             compact(['properties', 'categories', 'category']));
     }
-    
-    /**
-     * @param  Property  $property
-     *
-     * @return Response
-     */
+
     public function show(Property $property): Response
     {
         $categories = CategoryResource::collection(Category::orderBy('position')
@@ -57,7 +50,7 @@ class PropertyController extends InertiaController
             ->get());
         
         $property = PropertyResource::make($property);
-        
+
         return $this->render('Vendor/PropertyCatalog/Frontend/Property/Show', ['category', 'property'],
             compact(['property', 'categories']));
     }

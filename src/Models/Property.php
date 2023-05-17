@@ -77,7 +77,7 @@ class Property extends Model
         'published',
         'highlighted',
         'cover',
-        'video_cover'
+        'video_cover',
     ];
 
     protected $table = 'procat_properties';
@@ -91,7 +91,7 @@ class Property extends Model
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
     }
-    
+
     public function prices(): HasMany
     {
         return $this->hasMany(PropertyPrice::class, 'property_id', 'id')->orderBy('position');
