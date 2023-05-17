@@ -2,10 +2,8 @@
 
 namespace Wepa\PropertyCatalog\Http\Controllers\Frontend;
 
-use Cookie;
 use Illuminate\Http\Request;
 use Inertia\Response;
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Wepa\Core\Http\Controllers\Frontend\InertiaController;
 use Wepa\PropertyCatalog\Http\Resources\CategoryResource;
 use Wepa\PropertyCatalog\Http\Resources\PropertyResource;
@@ -48,7 +46,7 @@ class PropertyController extends InertiaController
         $categories = CategoryResource::collection(Category::orderBy('position')
             ->where('published', true)
             ->get());
-        
+
         $property = PropertyResource::make($property);
 
         return $this->render('Vendor/PropertyCatalog/Frontend/Property/Show', ['category', 'property'],
