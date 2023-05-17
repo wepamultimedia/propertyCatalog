@@ -52,22 +52,13 @@ class PropertyController extends InertiaController
      */
     public function show(Property $property): Response
     {
-        $CrawlerDetect = new CrawlerDetect;
-        
-        $isCrawler = $CrawlerDetect->isCrawler();
-        
         $categories = CategoryResource::collection(Category::orderBy('position')
             ->where('published', true)
             ->get());
         
-        $register = true;
-        if (Cookie::get('registeredLead')) {
-            $register = false;
-        }
-        
         $property = PropertyResource::make($property);
         
         return $this->render('Vendor/PropertyCatalog/Frontend/Property/Show', ['category', 'property'],
-            compact(['property', 'categories', 'isCrawler', 'register']));
+            compact(['property', 'categories']));
     }
 }
