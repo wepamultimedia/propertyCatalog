@@ -29,6 +29,9 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property int $published
  * @property int $position
  * @property array $images
+ * @property string $address
+ * @property string $latitude
+ * @property string $longitude
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Wepa\PropertyCatalog\Models\Category|null $category
@@ -78,6 +81,9 @@ class Property extends Model
         'highlighted',
         'cover',
         'video_cover',
+        'address',
+        'latitude',
+        'longitude',
     ];
 
     protected $table = 'procat_properties';

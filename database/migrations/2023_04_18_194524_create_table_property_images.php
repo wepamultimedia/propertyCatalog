@@ -36,7 +36,6 @@ return new class extends Migration
                 ->on('procat_properties_images')
                 ->onDelete('cascade');
         });
-
     }
 
     /**

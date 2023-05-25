@@ -30,7 +30,6 @@ class PropertyFactory extends Factory
                 'description' => $property->summary,
             ]);
             $property->seo_id = $seo->id;
-
         })->afterCreating(function (Property $property) {
             $seo = Seo::where(['id' => $property->seo_id])->first();
             $seo->update(['route_params' => ['property' => $property->id]]);

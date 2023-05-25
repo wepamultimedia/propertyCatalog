@@ -132,7 +132,6 @@ class PropertyController extends InertiaController
         } catch (\Illuminate\Database\QueryException $e) {
             Seo::where('id', $seoId)->delete();
         }
-
     }
 
     /**

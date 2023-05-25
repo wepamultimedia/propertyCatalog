@@ -25,7 +25,6 @@ class CategoryFactory extends Factory
                 'description' => $category->description,
             ]);
             $category->seo_id = $seo->id;
-
         })->afterCreating(function (Category $category) {
             $seo = Seo::where(['id' => $category->seo_id])->first();
             $seo->update(['request_params' => ['category_id' => $category->id]]);
