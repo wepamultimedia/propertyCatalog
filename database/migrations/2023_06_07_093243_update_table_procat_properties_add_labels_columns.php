@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('procat_properties', function(Blueprint $table){
+        Schema::table('procat_properties', function (Blueprint $table) {
             $table->boolean('latest')->default(false);
             $table->boolean('new')->default(false);
             $table->boolean('airbnb')->default(false);
@@ -27,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('procat_properties', function(Blueprint $table){
+        Schema::table('procat_properties', function (Blueprint $table) {
             $table->dropColumn('latest');
             $table->dropColumn('new');
             $table->dropColumn('airbnb');

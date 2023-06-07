@@ -26,13 +26,13 @@ Route::prefix('admin/property-catalog')
 
         Route::put('properties/upate/published/{property}/{published}', [PropertyController::class, 'published'])
             ->name('admin.property_catalog.properties.update.published');
-    
+
         Route::put('properties/upate/highlighted/{property}/{highlighted}', [PropertyController::class, 'highlighted'])
             ->name('admin.property_catalog.properties.update.highlighted');
-    
+
         Route::put('properties/upate/new/{property}/{new}', [PropertyController::class, 'new'])
             ->name('admin.property_catalog.properties.update.new');
-    
+
         Route::put('properties/upate/latest/{property}/{latest}', [PropertyController::class, 'latest'])
             ->name('admin.property_catalog.properties.update.latest');
 
