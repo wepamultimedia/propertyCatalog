@@ -39,6 +39,9 @@ class PropertyResource extends JsonResource
                 return PropertyImageResource::collection($this->images);
             }),
             'prices' => $this->prices,
+            'address' => $this->address,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
             'translations' => $this->when($request->routeIs('*admin*.edit'), function () {
                 return $this->getTranslationsArray();
             }),

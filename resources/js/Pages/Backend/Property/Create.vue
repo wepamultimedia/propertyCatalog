@@ -36,14 +36,11 @@ const values = reactive({
     cover_alt: null
 });
 const selectedLocale = ref();
-
 const store = useStore();
-
 const form = useForm({
     translations: {},
     ...props.property.data
 });
-
 const submit = () => {
     form.post(route("admin.property_catalog.properties.store"), {
         onSuccess: () => store.dispatch("backend/addAlert", {type: "success", message: __("saved")}),
@@ -88,6 +85,22 @@ const submit = () => {
                                   required
                                   translation/>
                     </div>
+	                <div class="mb-6">
+		                <Textarea v-model="form"
+		                       :errors="errors"
+		                       :label="__('address')"
+		                       name="address"/>
+	                </div>
+	                <div class="mb-6 grid lg:grid-cols-2 gap-4">
+		                <Input v-model="form"
+		                       :errors="errors"
+		                       :label="__('latitude')"
+		                       name="latitude"/>
+		                <Input v-model="form"
+		                       :errors="errors"
+		                       :label="__('longitude')"
+		                       name="longitude"/>
+	                </div>
                     <div class="mb-6">
                         <div class="mt-1"
                              style="--ck-border-radius: 0.50rem">

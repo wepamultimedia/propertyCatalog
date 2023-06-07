@@ -132,6 +132,7 @@ class PropertyController extends InertiaController
         $property = Property::create($data->toArray());
         
         return redirect(route('admin.property_catalog.properties.edit', ['property' => $property->id]));
+
     }
     
     /**

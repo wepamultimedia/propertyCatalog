@@ -34,6 +34,9 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property bool $latest
  * @property bool $new
  * @property bool $airbnb
+ * @property string $address
+ * @property string $latitude
+ * @property string $longitude
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Wepa\PropertyCatalog\Models\Category|null $category
@@ -88,6 +91,9 @@ class Property extends Model
         'latest',
         'new',
         'airbnb',
+        'address',
+        'latitude',
+        'longitude',
     ];
     
     protected $table = 'procat_properties';

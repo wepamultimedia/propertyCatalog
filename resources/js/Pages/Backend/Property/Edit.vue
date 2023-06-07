@@ -39,13 +39,10 @@ const values = reactive({
     cover_alt: null
 });
 const selectedLocale = ref();
-
 const store = useStore();
-
 const form = useForm({
     ...props.property.data
 });
-
 const imageGallery = reactive({
     flap: false,
     add: image => {
@@ -97,7 +94,6 @@ const imageGallery = reactive({
         translations: {}
     })
 });
-
 const pricesForm = reactive({
     flap: false,
     type: "",
@@ -194,6 +190,22 @@ const submit = () => {
                                   required
                                   translation/>
                     </div>
+	                <div class="mb-6">
+		                <Textarea v-model="form"
+		                          :errors="errors"
+		                          :label="__('address')"
+		                          name="address"/>
+	                </div>
+	                <div class="mb-6 grid lg:grid-cols-2 gap-4">
+		                <Input v-model="form"
+		                       :errors="errors"
+		                       :label="__('latitude')"
+		                       name="latitude"/>
+		                <Input v-model="form"
+		                       :errors="errors"
+		                       :label="__('longitude')"
+		                       name="longitude"/>
+	                </div>
                     <div class="mb-6">
                         <div class="mt-1"
                              style="--ck-border-radius: 0.50rem">
