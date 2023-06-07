@@ -31,4 +31,7 @@ return [
     'delete_price_message' => '¿Esta seguro de que desea borrar el precio?',
     'photos' => 'Galería de fotos',
     'price_info' => 'Los precios están sujetos a cambios sin previo aviso',
+    'new' => 'Nuevos',
+    'latest' => 'Últimos',
+    'airbnb' => 'AIRBNB',
 ];

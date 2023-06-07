@@ -2,16 +2,18 @@
 
 namespace Wepa\PropertyCatalog\Models;
 
+
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
+use Wepa\Core\Http\Traits\SeoModelTrait;
 use Wepa\Core\Models\Seo;
 use Wepa\PropertyCatalog\Database\Factories\PropertyFactory;
 use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
+
 
 /**
  * Wepa\PropertyCatalog\Models\Property
@@ -29,6 +31,9 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property int $published
  * @property int $position
  * @property array $images
+ * @property bool $latest
+ * @property bool $new
+ * @property bool $airbnb
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Wepa\PropertyCatalog\Models\Category|null $category
@@ -65,11 +70,13 @@ class Property extends Model
     use HasFactory;
     use Translatable;
     use PositionModelTrait;
-
+    use SeoModelTrait;
+    
+    
     public array $translatedAttributes = ['name', 'summary', 'delivery', 'data_sheet', 'cover_alt'];
-
+    
     public $translationForeignKey = 'property_id';
-
+    
     protected $fillable = [
         'seo_id',
         'position',
@@ -78,34 +85,51 @@ class Property extends Model
         'highlighted',
         'cover',
         'video_cover',
+        'latest',
+        'new',
+        'airbnb',
     ];
-
+    
     protected $table = 'procat_properties';
-
+    
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
-
+    
     public function images(): HasMany
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
     }
-
+    
     public function prices(): HasMany
     {
         return $this->hasMany(PropertyPrice::class, 'property_id', 'id')->orderBy('position');
     }
-
-    public function seo(): HasOne
+    
+    public function seoDefaultParams(): array
     {
-        return $this->hasOne(Seo::class, 'id', 'seo_id')
-            ->withDefault([
-                'controller' => PropertyController::class,
-                'action' => 'show',
-            ]);
+        return [
+            'package' => 'property_catalog',
+            'controller' => PropertyController::class,
+            'action' => 'show',
+            'page_type' => 'article',
+            'change_freq' => Seo::CHANGE_FREQUENCY_MONTHLY,
+            'priority' => '0.8',
+            'canonical' => true,
+        ];
     }
-
+    
+    public function seoRequestParams(): array
+    {
+        return [];
+    }
+    
+    public function seoRouteParams(): array
+    {
+        return $this->id ? ['property' => $this->id] : [];
+    }
+    
     protected static function newFactory()
     {
         return PropertyFactory::new();

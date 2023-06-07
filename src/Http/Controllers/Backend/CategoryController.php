@@ -26,8 +26,6 @@ class CategoryController extends InertiaController
      */
     public function destroy(Category $category): Redirector|RedirectResponse|Application
     {
-        $seo = Seo::where('id', $category->seo_id)->first();
-        $seo->delete();
         $category->delete();
 
         return redirect(route('admin.property_catalog.categories.index'));
@@ -61,7 +59,7 @@ class CategoryController extends InertiaController
         $category->updatePosition($position);
     }
 
-    public function publish(Category $category, bool $published): void
+    public function published(Category $category, bool $published): void
     {
         $category->update(['published' => $published]);
     }
@@ -71,13 +69,8 @@ class CategoryController extends InertiaController
      */
     public function update(CategoryRequest $request, Category $category): Redirector|RedirectResponse|Application
     {
-        $seoId = $this->seoUpdateOrCreate([
-            'route_params' => ['category_id' => $category->id],
-        ]);
-
-        $params = collect($request->all)
+        $params = collect($request->all())
             ->merge($request->translations)
-            ->merge(['seo_id' => $seoId])
             ->except(['translations'])
             ->toArray();
 
@@ -94,23 +87,16 @@ class CategoryController extends InertiaController
      */
     public function store(CategoryRequest $request): Redirector|RedirectResponse|Application
     {
-        $seoId = $this->seoUpdateOrCreate();
-
         $data = collect($request->all())
             ->merge([
                 'position' => Category::nextPosition(),
-                'seo_id' => $seoId,
                 'published' => true,
             ])
             ->merge($request->translations)
             ->except(['translations'])
             ->toArray();
 
-        $category = Category::create($data);
-
-        $this->seoUpdate($seoId, [
-            'request_params' => ['category_id' => $category->id],
-        ]);
+        Category::create($data);
 
         return redirect(route('admin.property_catalog.categories.index'));
     }

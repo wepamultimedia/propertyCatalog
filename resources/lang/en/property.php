@@ -29,5 +29,7 @@ return [
     'delete_price_title' => 'Delete price',
     'delete_price_message' => 'Are you sure you want to delete the price?',
     'price_info' => 'Prices are subject to change without notice',
-
+    'new' => 'New',
+    'latest' => 'Latest',
+    'airbnb' => 'AIRBNB',
 ];

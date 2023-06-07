@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
+use Wepa\Core\Http\Traits\SeoModelTrait;
 use Wepa\Core\Models\Seo;
 use Wepa\PropertyCatalog\Database\Factories\CategoryFactory;
 use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
@@ -55,6 +56,7 @@ class Category extends Model
     use HasFactory;
     use Translatable;
     use PositionModelTrait;
+    use SeoModelTrait;
 
     public array $translatedAttributes = ['name', 'description'];
 
@@ -74,17 +76,30 @@ class Category extends Model
         return $this->hasMany(Property::class, 'category_id', 'id');
     }
 
-    public function seo(): HasOne
-    {
-        return $this->hasOne(Seo::class, 'id', 'seo_id')
-            ->withDefault([
-                'controller' => PropertyController::class,
-                'action' => 'index',
-            ]);
-    }
-
     protected static function newFactory(): CategoryFactory
     {
         return CategoryFactory::new();
+    }
+    
+    public function seoDefaultParams(): array
+    {
+        return [
+            'controller' => PropertyController::class,
+            'action' => 'index',
+            'page_type' => 'article',
+            'change_freq' => Seo::CHANGE_FREQUENCY_WEEKLY,
+            'priority' => '0.8',
+            'canonical' => true
+        ];
+    }
+    
+    public function seoRequestParams(): array
+    {
+        return $this->id ? ['category_id' => $this->id] : [];
+    }
+    
+    public function seoRouteParams(): array
+    {
+        return [];
     }
 }
