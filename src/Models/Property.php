@@ -105,12 +105,12 @@ class Property extends Model
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
     }
-    
+
     public function files(): HasMany
     {
         return $this->hasMany(PropertyFile::class, 'property_id', 'id')->orderBy('position');
     }
-    
+
     public function prices(): HasMany
     {
         return $this->hasMany(PropertyPrice::class, 'property_id', 'id')->orderBy('position');

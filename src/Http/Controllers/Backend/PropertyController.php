@@ -44,7 +44,7 @@ class PropertyController extends InertiaController
 
         $images = PropertyImageResource::collection($property->images);
         $files = PropertyFileResource::collection($property->files);
-        
+
         return $this->render('Vendor/PropertyCatalog/Backend/Property/Edit', ['core::seo', 'property'],
             compact(['property', 'categories', 'images', 'files', 'prices']));
     }

@@ -46,11 +46,11 @@ Route::prefix('admin/property-catalog')
 
         Route::put('properties/images/position/{image}/{position}', [PropertyImageController::class, 'position'])
             ->name('admin.property_catalog.images.position');
-    
+
         // Properties files
         Route::resource('properties/files', PropertyFileController::class)
             ->names('admin.property_catalog.files');
-    
+
         Route::put('properties/files/position/{file}/{position}', [PropertyFileController::class, 'position'])
             ->name('admin.property_catalog.files.position');
 
