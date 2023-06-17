@@ -31,6 +31,7 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property int $published
  * @property int $position
  * @property array $images
+ * @property array $files
  * @property bool $latest
  * @property bool $new
  * @property bool $airbnb
@@ -106,6 +107,11 @@ class Property extends Model
     public function images(): HasMany
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
+    }
+    
+    public function files(): HasMany
+    {
+        return $this->hasMany(PropertyFile::class, 'property_id', 'id')->orderBy('position');
     }
     
     public function prices(): HasMany

@@ -13,6 +13,7 @@ use Wepa\Core\Http\Controllers\Backend\InertiaController;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
 use Wepa\PropertyCatalog\Http\Requests\PropertyRequest;
 use Wepa\PropertyCatalog\Http\Resources\CategoryResource;
+use Wepa\PropertyCatalog\Http\Resources\PropertyFileResource;
 use Wepa\PropertyCatalog\Http\Resources\PropertyImageResource;
 use Wepa\PropertyCatalog\Http\Resources\PropertyPriceResource;
 use Wepa\PropertyCatalog\Http\Resources\PropertyResource;
@@ -45,9 +46,10 @@ class PropertyController extends InertiaController
         $property = PropertyResource::make($property);
         
         $images = PropertyImageResource::collection($property->images);
+        $files = PropertyFileResource::collection($property->files);
         
         return $this->render('Vendor/PropertyCatalog/Backend/Property/Edit', ['core::seo', 'property'],
-            compact(['property', 'categories', 'images', 'prices']));
+            compact(['property', 'categories', 'images', 'files', 'prices']));
     }
     
     public function index(Request $request): Response

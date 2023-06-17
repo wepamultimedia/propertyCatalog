@@ -13,6 +13,7 @@ class PropertyImageController extends Controller
 {
     public function destroy(PropertyImage $image): Application|RedirectResponse|Redirector
     {
+        $image->placeInLastPosition(['property_id' => $image->property_id]);
         $image->delete();
 
         return redirect(route('admin.property_catalog.properties.show', ['property' => $image->property_id]));
@@ -20,7 +21,7 @@ class PropertyImageController extends Controller
 
     public function position(PropertyImage $image, int $position): RedirectResponse|Application|Redirector
     {
-        $image->updatePosition($position);
+        $image->updatePosition($position, ['property' => $image->property_id]);
 
         return redirect(route('admin.property_catalog.properties.show', ['property' => $image->property_id]));
     }
