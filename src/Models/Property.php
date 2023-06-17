@@ -2,7 +2,6 @@
 
 namespace Wepa\PropertyCatalog\Models;
 
-
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +12,6 @@ use Wepa\Core\Http\Traits\SeoModelTrait;
 use Wepa\Core\Models\Seo;
 use Wepa\PropertyCatalog\Database\Factories\PropertyFactory;
 use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
-
 
 /**
  * Wepa\PropertyCatalog\Models\Property
@@ -75,12 +73,11 @@ class Property extends Model
     use Translatable;
     use PositionModelTrait;
     use SeoModelTrait;
-    
-    
+
     public array $translatedAttributes = ['name', 'summary', 'delivery', 'data_sheet', 'cover_alt'];
-    
+
     public $translationForeignKey = 'property_id';
-    
+
     protected $fillable = [
         'seo_id',
         'position',
@@ -96,14 +93,14 @@ class Property extends Model
         'latitude',
         'longitude',
     ];
-    
+
     protected $table = 'procat_properties';
-    
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
-    
+
     public function images(): HasMany
     {
         return $this->hasMany(PropertyImage::class, 'property_id', 'id')->orderBy('position');
@@ -118,7 +115,7 @@ class Property extends Model
     {
         return $this->hasMany(PropertyPrice::class, 'property_id', 'id')->orderBy('position');
     }
-    
+
     public function seoDefaultParams(): array
     {
         return [
@@ -131,17 +128,17 @@ class Property extends Model
             'canonical' => true,
         ];
     }
-    
+
     public function seoRequestParams(): array
     {
         return [];
     }
-    
+
     public function seoRouteParams(): array
     {
         return $this->id ? ['property' => $this->id] : [];
     }
-    
+
     protected static function newFactory()
     {
         return PropertyFactory::new();

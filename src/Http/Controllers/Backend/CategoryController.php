@@ -10,7 +10,6 @@ use Illuminate\Routing\Redirector;
 use Inertia\Response;
 use Wepa\Core\Http\Controllers\Frontend\InertiaController;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
-use Wepa\Core\Models\Seo;
 use Wepa\PropertyCatalog\Http\Requests\CategoryRequest;
 use Wepa\PropertyCatalog\Http\Resources\CategoryResource;
 use Wepa\PropertyCatalog\Models\Category;
