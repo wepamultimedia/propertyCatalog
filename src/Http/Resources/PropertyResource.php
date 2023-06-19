@@ -38,6 +38,7 @@ class PropertyResource extends JsonResource
             'images' => $this->when(! $request->routeIs('*admin*'), function () {
                 return PropertyImageResource::collection($this->images);
             }),
+            'files' => $this->files,
             'prices' => $this->prices,
             'address' => $this->address,
             'latitude' => $this->latitude,
