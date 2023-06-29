@@ -25,12 +25,12 @@ class PropertyCatalogServiceProvider extends PackageServiceProvider
         // Pages
         $this->publishes([
             __DIR__.'/../resources/js/Pages' => resource_path('js/Pages/Vendor/PropertyCatalog'),
-        ], ['blog', 'property-catalog-pages']);
+        ], ['property-catalog', 'property-catalog-pages']);
 
         // Components
         $this->publishes([
             __DIR__.'/../resources/js/Components' => resource_path('js/Vendor/PropertyCatalog'),
-        ], ['blog', 'property-catalog-components']);
+        ], ['property-catalog', 'property-catalog-components']);
 
         $this->publishes([
             __DIR__.'/../tests/Unit' => base_path('tests/Unit/PropertyCatalog'),
