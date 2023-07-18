@@ -37,5 +37,5 @@ return [
     'new' => 'Nuevos',
     'latest' => 'Últimos',
     'airbnb' => 'AIRBNB',
-    'google_earth' => 'Google Earth'
+    'google_earth' => 'Google Earth',
 ];
