@@ -28,6 +28,7 @@ class PropertyRequest extends FormRequest
             'highlighted' => 'nullable|boolean',
             'category_id' => 'required|numeric',
             'cover' => 'required|string',
+            'google_earth' => 'nullable|string',
             'video_cover' => 'nullable|string',
             'address' => 'nullable|string',
             'latitude' => 'nullable|string',

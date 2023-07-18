@@ -43,6 +43,7 @@ class PropertyResource extends JsonResource
             'address' => $this->address,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
+            'google_earth' => $this->google_earth,
             'translations' => $this->when($request->routeIs('*admin*.edit'), function () {
                 return $this->getTranslationsArray();
             }),

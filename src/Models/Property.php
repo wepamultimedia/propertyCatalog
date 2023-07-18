@@ -36,6 +36,7 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property string $address
  * @property string $latitude
  * @property string $longitude
+ * @property string $google_earth
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Wepa\PropertyCatalog\Models\Category|null $category
@@ -92,6 +93,7 @@ class Property extends Model
         'address',
         'latitude',
         'longitude',
+        'google_earth'
     ];
 
     protected $table = 'procat_properties';

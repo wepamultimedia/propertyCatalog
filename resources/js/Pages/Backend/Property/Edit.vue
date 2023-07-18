@@ -255,6 +255,12 @@ const submit = () => {
                         <div class="mb-6">
                             <Input v-model="form"
                                    :errors="errors"
+                                   :label="__('google_earth')"
+                                   name="google_earth"/>
+                        </div>
+                        <div class="mb-6">
+                            <Input v-model="form"
+                                   :errors="errors"
                                    :label="__('video_cover')"
                                    name="video_cover"/>
                         </div>
