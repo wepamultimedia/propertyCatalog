@@ -18,6 +18,7 @@ class CategoryController extends Controller
         if ($locale) {
             app()->setLocale($locale);
         }
+
         return CategoryResource::collection(Category::orderBy('position')
             ->where('published', true)
             ->get());
