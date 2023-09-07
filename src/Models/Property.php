@@ -93,7 +93,7 @@ class Property extends Model
         'address',
         'latitude',
         'longitude',
-        'google_earth'
+        'google_earth',
     ];
 
     protected $table = 'procat_properties';
