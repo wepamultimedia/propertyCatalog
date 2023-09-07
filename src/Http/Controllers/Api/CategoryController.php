@@ -13,8 +13,11 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(string $locale = null)
     {
+        if ($locale) {
+            app()->setLocale($locale);
+        }
         return CategoryResource::collection(Category::orderBy('position')
             ->where('published', true)
             ->get());

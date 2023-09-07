@@ -9,8 +9,12 @@ use Wepa\PropertyCatalog\Models\Property;
 
 class PropertyController extends Controller
 {
-    public function highlights(): AnonymousResourceCollection
+    public function highlights(string $locale = null): AnonymousResourceCollection
     {
+        if ($locale) {
+            app()->setLocale($locale);
+        }
+
         return PropertyResource::collection(
             Property::where('highlighted', true)
                 ->where('published', true)
@@ -18,8 +22,12 @@ class PropertyController extends Controller
                 ->get());
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(string $locale = null): AnonymousResourceCollection
     {
+        if ($locale) {
+            app()->setLocale($locale);
+        }
+
         return PropertyResource::collection(
             Property::orderBy('position', 'desc')
                 ->where('published', true)
