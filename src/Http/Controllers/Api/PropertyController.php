@@ -31,8 +31,8 @@ class PropertyController extends Controller
 
         $query = Property::where('published', true);
 
-        if($request['order_by']){
-            $query->orderBy($request['order_by']);
+        if ($request['orderByName']) {
+            $query->orderByTranslation('name');
         } else {
             $query->orderBy('position', 'desc');
         }
