@@ -3,6 +3,7 @@
 namespace Wepa\PropertyCatalog\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Wepa\PropertyCatalog\Http\Resources\PropertyResource;
 use Wepa\PropertyCatalog\Models\Property;
@@ -22,15 +23,20 @@ class PropertyController extends Controller
                 ->get());
     }
 
-    public function index(string $locale = null): AnonymousResourceCollection
+    public function index(Request $request, string $locale = null): AnonymousResourceCollection
     {
         if ($locale) {
             app()->setLocale($locale);
         }
 
-        return PropertyResource::collection(
-            Property::orderBy('position', 'desc')
-                ->where('published', true)
-                ->get());
+        $query = Property::where('published', true);
+
+        if($request['order_by']){
+            $query->orderBy($request['order_by']);
+        } else {
+            $query->orderBy('position', 'desc');
+        }
+
+        return PropertyResource::collection($query->get());
     }
 }
