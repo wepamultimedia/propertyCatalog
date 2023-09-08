@@ -71,9 +71,9 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
 class Property extends Model
 {
     use HasFactory;
-    use Translatable;
     use PositionModelTrait;
     use SeoModelTrait;
+    use Translatable;
 
     public array $translatedAttributes = ['name', 'summary', 'delivery', 'data_sheet', 'cover_alt'];
 

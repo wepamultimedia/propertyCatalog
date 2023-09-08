@@ -53,9 +53,9 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
 class Category extends Model
 {
     use HasFactory;
-    use Translatable;
     use PositionModelTrait;
     use SeoModelTrait;
+    use Translatable;
 
     public array $translatedAttributes = ['name', 'description'];
 

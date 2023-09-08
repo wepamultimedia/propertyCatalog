@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('procat_properties', function (Blueprint $table){
+        Schema::table('procat_properties', function (Blueprint $table) {
             $table->string('google_earth')->nullable();
         });
     }
