@@ -5,7 +5,7 @@ namespace Wepa\PropertyCatalog;
 use Database\Seeders\DatabaseSeeder;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Wepa\PropertyCatalog\Commands\PropertyCatalogCommand;
+use Wepa\PropertyCatalog\Commands\PropertyCatalogMenuCommand;
 use Wepa\PropertyCatalog\Database\seeders\DefaultSeeder;
 
 class PropertyCatalogServiceProvider extends PackageServiceProvider
@@ -59,6 +59,6 @@ class PropertyCatalogServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasRoutes(['web', 'admin', 'api'])
             ->hasTranslations()
-            ->hasCommand(PropertyCatalogCommand::class);
+            ->hasCommand(PropertyCatalogMenuCommand::class);
     }
 }
