@@ -20,8 +20,8 @@ import Icon from "@core/Components/Heroicon.vue";
 
 const props = defineProps(['categories']);
 
-const publish = item => {
-    router.put(route("admin.property_catalog.categories.publish", {
+const togglePublished = item => {
+    router.put(route("admin.property_catalog.categories.update.published", {
         category: item.id,
         published: item.published ? 1 : 0
     }), {
@@ -65,7 +65,7 @@ const updatePosition = (item, position) => {
                search-route="admin.property_catalog.categories.index">
             <template #col-content-published="{item}">
                 <ToggleButton v-model="item.published" :key="item.id + '-component'"
-                              @change="publish(item)"/>
+                              @change="tooglePublished(item)"/>
             </template>
             <template #col-content-position="{item}">
                 <div class="flex items-center justify-start">

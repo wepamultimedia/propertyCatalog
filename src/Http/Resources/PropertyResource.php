@@ -25,6 +25,7 @@ class PropertyResource extends JsonResource
             'latest' => $this->latest,
             'new' => $this->new,
             'airbnb' => $this->airbnb,
+            'sold' => $this->sold,
             'summary' => $this->summary,
             'delivery' => $this->delivery,
             'video_cover' => $this->video_cover,

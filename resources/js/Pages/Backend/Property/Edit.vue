@@ -19,6 +19,7 @@ import Table from "@core/Components/Table.vue";
 import Ckeditor from "@core/Components/Form/Ckeditor.vue";
 import ToggleButton from "@core/Components/Form/ToggleButton.vue";
 import InputImage from "@core/Components/Form/InputImage.vue";
+import InputFile from "@core/Components/Form/InputFile.vue";
 import Select from "@core/Components/Select.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
@@ -30,7 +31,7 @@ import Icon from "@core/Components/Heroicon.vue";
 import Flap from "@core/Components/Flap.vue";
 import { useStore } from "vuex";
 
-const props = defineProps(["property", "categories", "images", "prices", "errors"]);
+const props = defineProps(["property", "categories", "images", "files", "prices", "errors"]);
 
 const values = reactive({
     name: null,
@@ -43,39 +44,77 @@ const store = useStore();
 const form = useForm({
     ...props.property.data
 });
-const imageGallery = reactive({
+
+const propertyFiles = reactive({
     flap: false,
-    add: image => {
-        imageGallery.form.image_url = image.url;
-        imageGallery.form.image_alt = image.alt_name;
-        imageGallery.form.property_id = form.id;
-        imageGallery.form.post(route("admin.property_catalog.images.store"), {
+    add: file => {
+        console.log(file);
+        propertyFiles.form.file_url = file.url;
+        propertyFiles.form.name = file.name;
+        propertyFiles.form.property_id = form.id;
+        propertyFiles.form.post(route("admin.property_catalog.files.store"), {
             preserveState: true,
             preserveScroll: true,
             onFinish: () => {
-                imageGallery.close();
-            }
-        });
-    },
-    edit: (image) => {
-        imageGallery.form.id = image.id;
-        imageGallery.form.property_id = image.property_id;
-        imageGallery.form.image_url = image.image_url;
-        imageGallery.form.translations = image.translations;
-        imageGallery.flap = true;
-    },
-    update: () => {
-        imageGallery.form.put(route("admin.property_catalog.images.update", {image: imageGallery.form.id}), {
-            preserveState: true,
-            preserveScroll: true,
-            onFinish: () => {
-                imageGallery.close();
+                propertyFiles.close();
             }
         });
     },
     close: () => {
-        imageGallery.flap = false;
-        imageGallery.form.reset();
+        propertyFiles.flap = false;
+        propertyFiles.form.reset();
+    },
+    position: (file, position) => {
+        router.put(route("admin.property_catalog.files.position", {
+            file: file.id,
+            position: position
+        }), {}, {
+            preserveState: true,
+            preserveScroll: true
+        });
+    },
+    form: useForm({
+        id: null,
+        property_id: null,
+        file_url: null,
+        name: null,
+        translations: {}
+    })
+});
+
+const propertyImages = reactive({
+    flap: false,
+    add: image => {
+        propertyImages.form.image_url = image.url;
+        propertyImages.form.image_alt = image.alt_name;
+        propertyImages.form.property_id = form.id;
+        propertyImages.form.post(route("admin.property_catalog.images.store"), {
+            preserveState: true,
+            preserveScroll: true,
+            onFinish: () => {
+                propertyImages.close();
+            }
+        });
+    },
+    edit: (image) => {
+        propertyImages.form.id = image.id;
+        propertyImages.form.property_id = image.property_id;
+        propertyImages.form.image_url = image.image_url;
+        propertyImages.form.translations = image.translations;
+        propertyImages.flap = true;
+    },
+    update: () => {
+        propertyImages.form.put(route("admin.property_catalog.images.update", {image: propertyImages.form.id}), {
+            preserveState: true,
+            preserveScroll: true,
+            onFinish: () => {
+                propertyImages.close();
+            }
+        });
+    },
+    close: () => {
+        propertyImages.flap = false;
+        propertyImages.form.reset();
     },
     position: (image, position) => {
         router.put(route("admin.property_catalog.images.position", {
@@ -107,7 +146,7 @@ const pricesForm = reactive({
         });
     },
     update: () => {
-        pricesForm.form.put(route("admin.property_catalog.prices.update", {price : pricesForm.form.id}), {
+        pricesForm.form.put(route("admin.property_catalog.prices.update", {price: pricesForm.form.id}), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
@@ -166,7 +205,7 @@ const submit = () => {
                     bg-white dark:bg-gray-600
                     rounded-lg
                     shadow">
-            <div class="grid grid-cols-12 divide-y xl:divide-x divide-gray-300 dark:divide-gray-700">
+            <div class="grid grid-cols-12 divide-y xl:divide-x xl:divide-y-0 divide-gray-300 dark:divide-gray-700">
                 <!-- title, summary and body-->
                 <div class="p-6 col-span-full xl:col-span-8">
                     <div class="mb-6">
@@ -223,13 +262,33 @@ const submit = () => {
                 <div class="col-span-full xl:col-span-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 divide-y lg:divide-x lg:divide-y-0 xl:divide-y xl:divide-x-0 divide-gray-300 dark:divide-gray-700 gap-4">
                     <!-- draft, date and category -->
                     <div class="p-6">
-                        <div class="mb-6">
-                            <label class="text-sm">{{ __("published") }}</label>
-                            <ToggleButton v-model="form.published"/>
+                        <div class="mb-6 grid grid-cols-3">
+                            <div>
+                                <label class="text-sm">{{ __("published") }}</label>
+                                <ToggleButton v-model="form.published"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("highlighted") }}</label>
+                                <ToggleButton v-model="form.highlighted"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("airbnb") }}</label>
+                                <ToggleButton v-model="form.airbnb"/>
+                            </div>
                         </div>
-                        <div class="mb-6">
-                            <label class="text-sm">{{ __("highlighted") }}</label>
-                            <ToggleButton v-model="form.highlighted"/>
+                        <div class="mb-6 grid grid-cols-3">
+                            <div>
+                                <label class="text-sm">{{ __("new") }}</label>
+                                <ToggleButton v-model="form.new"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("latest") }}</label>
+                                <ToggleButton v-model="form.latest"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("sold") }}</label>
+                                <ToggleButton v-model="form.sold"/>
+                            </div>
                         </div>
                         <div class="mb-6">
                             <Select v-model="form.category_id"
@@ -321,7 +380,7 @@ const submit = () => {
                              role="group">
                             <button class="rounded-l-lg px-1 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-0 active:bg-gray-800 transition duration-150 ease-in-out"
                                     type="button"
-                                    @click="imageGallery.position(item, item.position - 1)">
+                                    @click="propertyImages.position(item, item.position - 1)">
                                 <Icon class="m-0 fill-white h-4 w-4"
                                       icon="chevron-up"></Icon>
                             </button>
@@ -331,7 +390,7 @@ const submit = () => {
                             </span>
                             <button class="rounded-r-lg px-1 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-0 active:bg-gray-800 transition duration-150 ease-in-out"
                                     type="button"
-                                    @click="imageGallery.position(item, item.position + 1)">
+                                    @click="propertyImages.position(item, item.position + 1)">
                                 <Icon class="m-0 fill-white h-4 w-4"
                                       icon="chevron-down"></Icon>
                             </button>
@@ -348,7 +407,34 @@ const submit = () => {
             </Table>
         </div>
     </section>
-    <!-- Gallery -->
+    <!-- Property Files -->
+    <section class="my-8">
+        <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-6">
+            <span class="text-skin-base font-medium text-lg">{{ __("files") }}</span>
+            <InputFile :button-label="__('add_file')"
+                        button-class="btn btn-secondary"
+                        class="flex justify-end"
+                        name="cover"
+                        @change="propertyFiles.add"/>
+        </div>
+        <div class="text-skin-base
+                    border
+                    overflow-hidden
+                    dark:border-gray-600
+                    bg-white dark:bg-gray-600
+                    rounded-lg
+                    shadow">
+            <Table :columns="['name']"
+                   :data="files"
+                   :delete-message="__('delete_file_message')"
+                   :delete-title="__('delete_file_title')"
+                   delete-route="admin.property_catalog.files.destroy"
+                   divide-x
+                   even>
+            </Table>
+        </div>
+    </section>
+    <!-- Property Images -->
     <section class="my-8">
         <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-6">
             <span class="text-skin-base font-medium text-lg">{{ __("image_gallery") }}</span>
@@ -357,7 +443,7 @@ const submit = () => {
                         button-class="btn btn-secondary"
                         class="flex justify-end"
                         name="cover"
-                        @change="imageGallery.add"/>
+                        @change="propertyImages.add"/>
         </div>
         <div class="text-skin-base
                     border
@@ -387,7 +473,7 @@ const submit = () => {
                              role="group">
                             <button class="rounded-l-lg px-1 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-0 active:bg-gray-800 transition duration-150 ease-in-out"
                                     type="button"
-                                    @click="imageGallery.position(item, item.position - 1)">
+                                    @click="propertyImages.position(item, item.position - 1)">
                                 <Icon class="m-0 fill-white h-4 w-4"
                                       icon="chevron-up"></Icon>
                             </button>
@@ -397,7 +483,7 @@ const submit = () => {
                             </span>
                             <button class="rounded-r-lg px-1 py-2.5 bg-gray-400 text-white font-medium text-xs leading-tight uppercase hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-0 active:bg-gray-800 transition duration-150 ease-in-out"
                                     type="button"
-                                    @click="imageGallery.position(item, item.position + 1)">
+                                    @click="propertyImages.position(item, item.position + 1)">
                                 <Icon class="m-0 fill-white h-4 w-4"
                                       icon="chevron-down"></Icon>
                             </button>
@@ -406,7 +492,7 @@ const submit = () => {
                 </template>
                 <template #action-edit="{item}">
                     <button class="w-8 h-6"
-                            @click="imageGallery.edit(item)">
+                            @click="propertyImages.edit(item)">
                         <icon class="fill-skin-base w-5 h-5"
                               icon="pencil-alt"></icon>
                     </button>
@@ -484,20 +570,21 @@ const submit = () => {
             </div>
         </form>
     </Flap>
-    <!-- Image gallery flap -->
-    <Flap v-model="imageGallery.flap"
-          :on-close="imageGallery.close"
+
+    <!-- Property images flap -->
+    <Flap v-model="propertyImages.flap"
+          :on-close="propertyImages.close"
           close-background
           md>
         <form class="pb-8"
-              @submit.prevent="imageGallery.update">
+              @submit.prevent="propertyImages.update">
             <figure>
-                <img :src="imageGallery.form.image_url"
+                <img :src="propertyImages.form.image_url"
                      alt=""
                      class="w-full">
             </figure>
             <div class="my-6">
-                <Input v-model="imageGallery.form"
+                <Input v-model="propertyImages.form"
                        v-model:locale="selectedLocale"
                        :errors="errors"
                        :label="__('image_alt')"
@@ -507,7 +594,7 @@ const submit = () => {
                        translation/>
             </div>
             <div class="rounded-b-lg ">
-                <SaveFormButton :form="imageGallery.form"/>
+                <SaveFormButton :form="propertyImages.form"/>
             </div>
         </form>
     </Flap>

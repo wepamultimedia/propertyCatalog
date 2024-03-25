@@ -24,17 +24,20 @@ Route::prefix('admin/property-catalog')
         Route::put('properties/position/{property}/{position}', [PropertyController::class, 'position'])
             ->name('admin.property_catalog.properties.position');
 
-        Route::put('properties/upate/published/{property}/{published}', [PropertyController::class, 'published'])
+        Route::put('properties/update/published/{property}/{published}', [PropertyController::class, 'published'])
             ->name('admin.property_catalog.properties.update.published');
 
-        Route::put('properties/upate/highlighted/{property}/{highlighted}', [PropertyController::class, 'highlighted'])
+        Route::put('properties/update/highlighted/{property}/{highlighted}', [PropertyController::class, 'highlighted'])
             ->name('admin.property_catalog.properties.update.highlighted');
 
-        Route::put('properties/upate/new/{property}/{new}', [PropertyController::class, 'new'])
+        Route::put('properties/update/new/{property}/{new}', [PropertyController::class, 'new'])
             ->name('admin.property_catalog.properties.update.new');
 
-        Route::put('properties/upate/latest/{property}/{latest}', [PropertyController::class, 'latest'])
+        Route::put('properties/update/latest/{property}/{latest}', [PropertyController::class, 'latest'])
             ->name('admin.property_catalog.properties.update.latest');
+
+        Route::put('properties/update/sold/{property}/{sold}', [PropertyController::class, 'sold'])
+            ->name('admin.property_catalog.properties.update.sold');
 
         Route::resource('properties', PropertyController::class)
             ->names('admin.property_catalog.properties');

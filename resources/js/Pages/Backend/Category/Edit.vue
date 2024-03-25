@@ -103,9 +103,7 @@ const submit = () => {
             <SeoForm v-model:locale="selectedLocale"
                      v-model:seo="form.seo"
                      :description="inputValues.description"
-                     :robots="['noindex', 'nofollow']"
-                     :title="inputValues.name"
-                     page-type="article"/>
+                     :title="inputValues.name"/>
         </div>
     </form>
 </template>

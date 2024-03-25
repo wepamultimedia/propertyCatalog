@@ -93,6 +93,11 @@ class PropertyController extends InertiaController
         $property->update(['latest' => $latest]);
     }
 
+    public function sold(Property $property, bool $sold): void
+    {
+        $property->update(['sold' => $sold]);
+    }
+
     public function update(PropertyRequest $request, Property $property): Redirector|RedirectResponse|Application
     {
         $data = collect($request->all())

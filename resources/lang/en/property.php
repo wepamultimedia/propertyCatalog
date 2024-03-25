@@ -35,6 +35,7 @@ return [
     'new' => 'New',
     'latest' => 'Latest',
     'airbnb' => 'AIRBNB',
+    'sold' => 'Sold',
     'google_earth' => 'Google Earth',
     'delivery' => 'Delivery',
     'address' => 'Address',

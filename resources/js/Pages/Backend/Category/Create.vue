@@ -99,10 +99,8 @@ const submit = () => {
             <SeoForm v-model:locale="selectedLocale"
                      v-model:seo="form.seo"
                      :description="inputValues.description"
-                     :robots="['noindex', 'nofollow']"
                      :title="inputValues.name"
-                     autocomplete
-                     page-type="article"/>
+                     autocomplete/>
         </div>
     </form>
 </template>

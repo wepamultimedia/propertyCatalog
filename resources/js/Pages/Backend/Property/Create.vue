@@ -33,7 +33,8 @@ const values = reactive({
     name: null,
     summary: null,
     cover: null,
-    cover_alt: null
+    cover_alt: null,
+    cover_title:null
 });
 const selectedLocale = ref();
 const store = useStore();
@@ -61,7 +62,7 @@ const submit = () => {
                     bg-white dark:bg-gray-600
                     rounded-lg
                     shadow">
-            <div class="grid grid-cols-12 divide-y xl:divide-x divide-gray-300 dark:divide-gray-700">
+            <div class="grid grid-cols-12 divide-y xl:divide-x xl:divide-y-0 divide-gray-300 dark:divide-gray-700">
                 <!-- title, summary and body-->
                 <div class="p-6 col-span-full xl:col-span-8">
                     <div class="mb-6">
@@ -118,13 +119,33 @@ const submit = () => {
                 <div class="col-span-full xl:col-span-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 divide-y lg:divide-x lg:divide-y-0 xl:divide-y xl:divide-x-0 divide-gray-300 dark:divide-gray-700 gap-4">
                     <!-- draft, date and category -->
                     <div class="p-6">
-                        <div class="mb-6">
-                            <label class="text-sm">{{ __("published") }}</label>
-                            <ToggleButton v-model="form.published"/>
+                        <div class="mb-6 grid grid-cols-3">
+                            <div>
+                                <label class="text-sm">{{ __("published") }}</label>
+                                <ToggleButton v-model="form.published"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("highlighted") }}</label>
+                                <ToggleButton v-model="form.highlighted"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("airbnb") }}</label>
+                                <ToggleButton v-model="form.airbnb"/>
+                            </div>
                         </div>
-                        <div class="mb-6">
-                            <label class="text-sm">{{ __("highlighted") }}</label>
-                            <ToggleButton v-model="form.highlighted"/>
+                        <div class="mb-6 grid grid-cols-3">
+                            <div>
+                                <label class="text-sm">{{ __("new") }}</label>
+                                <ToggleButton v-model="form.new"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("latest") }}</label>
+                                <ToggleButton v-model="form.latest"/>
+                            </div>
+                            <div>
+                                <label class="text-sm">{{ __("sold") }}</label>
+                                <ToggleButton v-model="form.sold"/>
+                            </div>
                         </div>
                         <div class="mb-6">
                             <Select v-model="form.category_id"
@@ -160,9 +181,9 @@ const submit = () => {
                                    name="video_cover"/>
                         </div>
                         <div class="sm:w-1/2 lg:w-full mb-6">
-                            <InputImage v-model="form.cover"
-                                        v-model:alt="values.cover_alt"
-                                        v-model:image="values.cover"
+                            <InputImage v-model:url="form.cover"
+                                        v-model:alt_name="values.cover_alt"
+                                        v-model:title="values.cover_title"
                                         :errors="errors"
                                         :label="__('cover_image')"
                                         name="cover"/>
@@ -193,7 +214,9 @@ const submit = () => {
             <SeoForm v-model:seo="form.seo"
                      :description="values.summary"
                      :errors="errors?.seo"
-                     :image="values.cover"
+                     :image="form.cover"
+                     :image-title="values.cover_title"
+                     :image-alt="values.cover_alt"
                      :locale="selectedLocale"
                      :title="values.name"
                      article-type="blog_entry"

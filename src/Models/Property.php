@@ -33,6 +33,7 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property bool $latest
  * @property bool $new
  * @property bool $airbnb
+ * @property bool $sold
  * @property string $address
  * @property string $latitude
  * @property string $longitude
@@ -90,6 +91,7 @@ class Property extends Model
         'latest',
         'new',
         'airbnb',
+        'sold',
         'address',
         'latitude',
         'longitude',
