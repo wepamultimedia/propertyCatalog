@@ -10,7 +10,7 @@ use Wepa\PropertyCatalog\Models\Property;
 
 class PropertyController extends Controller
 {
-    public function highlights(string $locale = null): AnonymousResourceCollection
+    public function highlights(?string $locale = null): AnonymousResourceCollection
     {
         if ($locale) {
             app()->setLocale($locale);
@@ -23,7 +23,7 @@ class PropertyController extends Controller
                 ->get());
     }
 
-    public function index(Request $request, string $locale = null): AnonymousResourceCollection
+    public function index(Request $request, ?string $locale = null): AnonymousResourceCollection
     {
         if ($locale) {
             app()->setLocale($locale);
