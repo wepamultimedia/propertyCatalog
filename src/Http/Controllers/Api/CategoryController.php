@@ -13,7 +13,7 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(string $locale = null)
+    public function index(?string $locale = null)
     {
         if ($locale) {
             app()->setLocale($locale);
