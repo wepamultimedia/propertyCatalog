@@ -37,7 +37,8 @@ const values = reactive({
     name: null,
     summary: null,
     cover: null,
-    cover_alt: null
+    cover_alt: null,
+    cover_title: null
 });
 const selectedLocale = ref();
 const store = useStore();
@@ -325,8 +326,9 @@ const submit = () => {
                         </div>
                         <div class="sm:w-1/2 lg:w-full mb-6">
                             <InputImage v-model="form.cover"
-                                        v-model:alt="values.cover_alt"
-                                        v-model:image="values.cover"
+                                        v-model:alt_name="values.cover_alt"
+                                        v-model:title="values.cover_title"
+                                        v-model:url="values.cover"
                                         :errors="errors"
                                         :label="__('cover_image')"
                                         name="cover"/>
@@ -507,6 +509,8 @@ const submit = () => {
                  :description="values.summary"
                  :errors="errors?.seo"
                  :image="values.cover"
+                 :image-title="values.cover_title"
+                 :image-alt="values.cover_alt"
                  :locale="selectedLocale"
                  :title="values.name"
                  article-type="blog_entry"

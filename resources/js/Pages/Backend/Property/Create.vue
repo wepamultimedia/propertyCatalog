@@ -181,7 +181,8 @@ const submit = () => {
                                    name="video_cover"/>
                         </div>
                         <div class="sm:w-1/2 lg:w-full mb-6">
-                            <InputImage v-model:url="form.cover"
+                            <InputImage v-model="form.cover"
+                                        v-model:url="values.cover"
                                         v-model:alt_name="values.cover_alt"
                                         v-model:title="values.cover_title"
                                         :errors="errors"
@@ -214,7 +215,7 @@ const submit = () => {
             <SeoForm v-model:seo="form.seo"
                      :description="values.summary"
                      :errors="errors?.seo"
-                     :image="form.cover"
+                     :image="values.cover"
                      :image-title="values.cover_title"
                      :image-alt="values.cover_alt"
                      :locale="selectedLocale"
