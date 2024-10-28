@@ -105,7 +105,7 @@ class CategoryController extends InertiaController
      */
     public function create(): Response
     {
-        $category = CategoryResource::make(new Category());
+        $category = CategoryResource::make(new Category);
 
         return $this->render('Vendor/PropertyCatalog/Backend/Category/Create', ['core::seo', 'category'],
             compact(['category']));

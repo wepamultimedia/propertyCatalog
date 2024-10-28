@@ -143,7 +143,7 @@ class PropertyController extends InertiaController
     public function create(): Response
     {
         $categories = CategoryResource::collection(Category::all());
-        $property = PropertyResource::make(new Property());
+        $property = PropertyResource::make(new Property);
 
         return $this->render('Vendor/PropertyCatalog/Backend/Property/Create', ['core::seo', 'property'],
             compact(['property', 'categories']));

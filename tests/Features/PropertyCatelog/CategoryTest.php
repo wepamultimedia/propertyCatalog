@@ -22,7 +22,7 @@ class CategoryTest extends TestCase
                     'description' => 'Test Category description',
                 ],
             ],
-            'seo' => (new Category())->seo(),
+            'seo' => (new Category)->seo(),
             'position' => 1,
         ]);
 

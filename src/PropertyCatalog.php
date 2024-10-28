@@ -2,6 +2,4 @@
 
 namespace Wepa\PropertyCatalog;
 
-class PropertyCatalog
-{
-}
+class PropertyCatalog {}
