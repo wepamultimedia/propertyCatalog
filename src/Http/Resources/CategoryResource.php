@@ -3,8 +3,6 @@
 namespace Wepa\PropertyCatalog\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
-use Wepa\PropertyCatalog\Models\Category;
 
 class CategoryResource extends JsonResource
 {
@@ -25,7 +23,7 @@ class CategoryResource extends JsonResource
                 return TypeResource::make($this->type);
             }),
             'name' => $this->name,
-            'label' => $this->when($this->type_id, function(){
+            'label' => $this->when($this->type_id, function () {
                 return "{$this->type->name}/{$this->name}";
             }),
             'description' => $this->description,

@@ -6,6 +6,7 @@ use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyFileController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyImageController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyPriceController;
+
 Route::prefix('admin/property-catalog')
     ->middleware(['web', 'auth:sanctum', 'core.backend'])
     ->group(function () {

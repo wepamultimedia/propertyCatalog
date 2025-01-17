@@ -24,8 +24,6 @@ return new class extends Migration
             $table->unique(['type_id', 'locale'], 'procat_typeid_locale_unique');
         });
 
-
-
         Schema::table('procat_categories', function (Blueprint $table) {
             $table->foreignId('type_id')->nullable()->constrained('procat_types')->cascadeOnUpdate()->cascadeOnDelete();
         });
