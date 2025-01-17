@@ -31,8 +31,6 @@ class PropertyController extends InertiaController
             ->orderBy('position', 'desc')
             ->paginate();
 
-        dd($properties->toArray());
-
         $properties = PropertyResource::collection($properties);
         $category = null;
 
