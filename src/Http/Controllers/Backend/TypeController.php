@@ -42,7 +42,7 @@ class TypeController extends InertiaController
     {
         $types = Type::when($request->search,
             function ($query, $search) {
-                $query->whereTranslationLike('name', '%' . $search . '%');
+                $query->whereTranslationLike('name', '%'.$search.'%');
             })
             ->paginate();
 

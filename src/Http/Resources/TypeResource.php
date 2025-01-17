@@ -3,8 +3,6 @@
 namespace Wepa\PropertyCatalog\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
-use Wepa\PropertyCatalog\Models\Category;
 
 class TypeResource extends JsonResource
 {
