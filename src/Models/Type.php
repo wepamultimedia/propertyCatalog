@@ -6,7 +6,6 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
@@ -28,7 +27,6 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Property> $properties
- * @property-read Type $type
  * @property-read int|null $properties_count
  * @property-read CategoryTranslation|null $translation
  * @property-read Collection<int, CategoryTranslation> $translations
@@ -52,65 +50,32 @@ use Wepa\PropertyCatalog\Http\Controllers\Frontend\PropertyController;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category withTranslation()
- *
- * @mixin \Eloquent
  */
-class Category extends Model
+class Type extends Model
 {
-    use HasFactory;
-    use PositionModelTrait;
-    use SeoModelTrait;
     use Translatable;
 
-    public array $translatedAttributes = ['name', 'description'];
+    public static int $HOME_ID = 1;
 
-    public $translationForeignKey = 'category_id';
-
-    protected $fillable = [
-        'seo_id',
-        'type_id',
-        'name',
-        'position',
-        'published',
+    public static array $TYPES = [
+        ['id' => 1, 'name' => 'home'],
     ];
 
-    protected $table = 'procat_categories';
+    public static int $HOUSES_TYPE = 2;
 
-    protected static function newFactory(): CategoryFactory
-    {
-        return CategoryFactory::new();
-    }
+    public array $translatedAttributes = ['name'];
 
-    public function properties(): HasMany
-    {
-        return $this->hasMany(Property::class, 'category_id', 'id');
-    }
+    public $translationForeignKey = 'type_id';
 
-    public function type(): BelongsTo
-    {
-        return $this->belongsTo(Type::class, 'type_id', 'id');
-    }
+    protected $fillable = [
+        'created_at',
+        'updated_at',
+    ];
 
-    public function seoDefaultParams(): array
-    {
-        return [
-            'package' => 'property-catalog',
-            'controller' => PropertyController::class,
-            'action' => 'index',
-            'page_type' => 'article',
-            'change_freq' => Seo::CHANGE_FREQUENCY_WEEKLY,
-            'priority' => '0.8',
-            'canonical' => true,
-        ];
-    }
+    protected $table = 'procat_types';
 
-    public function seoRequestParams(): array
+    public function categories(): HasMany
     {
-        return $this->id ? ['category_id' => $this->id] : [];
-    }
-
-    public function seoRouteParams(): array
-    {
-        return [];
+        return $this->hasMany(Category::class, 'type_id', 'id');
     }
 }

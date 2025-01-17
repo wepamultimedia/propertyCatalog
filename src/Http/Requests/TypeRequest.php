@@ -4,7 +4,7 @@ namespace Wepa\PropertyCatalog\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class TypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'type_id' => 'integer|required',
             'translations.*.name' => 'string|required',
-            'translations.*.description' => 'string|required',
         ];
     }
 }

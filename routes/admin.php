@@ -6,10 +6,13 @@ use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyFileController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyImageController;
 use Wepa\PropertyCatalog\Http\Controllers\Backend\PropertyPriceController;
-
 Route::prefix('admin/property-catalog')
     ->middleware(['web', 'auth:sanctum', 'core.backend'])
     ->group(function () {
+        // Types
+        Route::resource('types', \Wepa\PropertyCatalog\Http\Controllers\Backend\TypeController::class)
+            ->names('admin.property_catalog.types');
+
         // Categories
         Route::put('categories/position/{category}/{position}', [CategoryController::class, 'position'])
             ->name('admin.property_catalog.categories.position');

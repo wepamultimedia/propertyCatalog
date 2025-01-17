@@ -3,18 +3,19 @@ import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout
 
 export default {
     layout: (h, page) => h(MainLayout, {
-        title: "properties",
+        title: "categories",
         bc: [
             {
                 label: "categories",
-                route: "admin.property_catalog.properties.index"
+                route: "admin.property_catalog.categories.index"
             }, {label: "edit"}
         ]
     }, () => page)
 };
 </script>
 <script setup>
-import { reactive, ref } from "vue";
+import Select from "@/Vendor/Core/Components/Select.vue";
+import {computed, reactive, ref} from "vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
 import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
@@ -24,10 +25,7 @@ import ToggleButton from "@core/Components/Form/ToggleButton.vue";
 import { useForm } from "@inertiajs/vue3";
 import { useStore } from "vuex";
 
-const props = defineProps({
-    category: Object,
-    errors: Object
-});
+const props = defineProps(["category", "errors", "types", "routePrefix"]);
 
 const inputValues = reactive({
     name: null,
@@ -38,8 +36,16 @@ const selectedLocale = ref();
 const store = useStore();
 
 const form = useForm({
+    type_id: null,
     translations: {},
     ...props.category.data
+});
+
+const typeName = computed(() => {
+    if (!form.type_id)
+        return "";
+    else
+        return __(props.types.data.find(type => type.id === form.type_id).translations[store.getters['backend/formLocale']].name);
 });
 
 const submit = () => {
@@ -72,6 +78,12 @@ const submit = () => {
                             <ToggleButton v-model="form.published" :key="form.id + '-component'" :label="__('published')"/>
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
+                            <Select v-model="form.type_id"
+                                    :label="__('type')"
+                                    :options="types.data.map(type => { return { id:type.id, label: type.name }})"
+                                    translate-label></Select>
+                        </div>
+                        <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                             <Input v-model="form"
                                    v-model:locale="selectedLocale"
                                    v-model:value="inputValues.name"
@@ -102,6 +114,8 @@ const submit = () => {
         <div class="text-skin-base  my-8">
             <SeoForm v-model:locale="selectedLocale"
                      v-model:seo="form.seo"
+                     :slug-prefix="routePrefix"
+                     :slug="`${typeName}/${inputValues.name !== null ? inputValues.name : ''}`"
                      :description="inputValues.description"
                      :title="inputValues.name"/>
         </div>

@@ -12,7 +12,9 @@ use Wepa\Core\Http\Controllers\Frontend\InertiaController;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
 use Wepa\PropertyCatalog\Http\Requests\CategoryRequest;
 use Wepa\PropertyCatalog\Http\Resources\CategoryResource;
+use Wepa\PropertyCatalog\Http\Resources\TypeResource;
 use Wepa\PropertyCatalog\Models\Category;
+use Wepa\PropertyCatalog\Models\Type;
 
 class CategoryController extends InertiaController
 {
@@ -36,9 +38,12 @@ class CategoryController extends InertiaController
     public function edit(Category $category): Response
     {
         $category = CategoryResource::make($category);
+        $types = TypeResource::collection(Type::all());
+
+        $routePrefix = config('property-catalog.routes.categories_slug_prefix');
 
         return $this->render('Vendor/PropertyCatalog/Backend/Category/Edit', ['core::seo', 'category'],
-            compact(['category']));
+            compact(['category', 'types', 'routePrefix']));
     }
 
     public function index(Request $request): Response
@@ -106,8 +111,10 @@ class CategoryController extends InertiaController
     public function create(): Response
     {
         $category = CategoryResource::make(new Category);
+        $types = Category::$TYPES;
+        $routePrefix = config('property-catalog.routes.categories_slug_prefix');
 
         return $this->render('Vendor/PropertyCatalog/Backend/Category/Create', ['core::seo', 'category'],
-            compact(['category']));
+            compact(['category', 'types', 'routePrefix']));
     }
 }

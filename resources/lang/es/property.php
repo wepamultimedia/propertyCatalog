@@ -39,4 +39,7 @@ return [
     'airbnb' => 'AIRBNB',
     'sold' => 'Vendidos',
     'google_earth' => 'Google Earth',
+    'address' => 'Dirección',
+    'latitude' => 'Latitud',
+    'longitude' => 'Longitud',
 ];

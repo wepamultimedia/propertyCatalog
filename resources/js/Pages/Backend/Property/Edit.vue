@@ -14,24 +14,24 @@ export default {
 };
 </script>
 <script setup>
-import { reactive, ref } from "vue";
+import {computed, reactive, ref} from "vue";
 import Table from "@core/Components/Table.vue";
 import Ckeditor from "@core/Components/Form/Ckeditor.vue";
 import ToggleButton from "@core/Components/Form/ToggleButton.vue";
 import InputImage from "@core/Components/Form/InputImage.vue";
 import InputFile from "@core/Components/Form/InputFile.vue";
 import Select from "@core/Components/Select.vue";
-import Input from "@/Vendor/Core/Components/Form/Input.vue";
-import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
-import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
+import Input from "@core/Components/Form/Input.vue";
+import Textarea from "@core/Components/Form/Textarea.vue";
+import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
 import SeoForm from "@core/Components/Backend/SeoForm.vue";
-import { __ } from "@/Vendor/Core/Mixins/translations";
-import { Link, router, useForm } from "@inertiajs/vue3";
+import {__} from "@core/Mixins/translations";
+import {router, useForm, usePage} from "@inertiajs/vue3";
 import Icon from "@core/Components/Heroicon.vue";
 import Flap from "@core/Components/Flap.vue";
-import { useStore } from "vuex";
+import {useStore} from "vuex";
 
-const props = defineProps(["property", "categories", "images", "files", "prices", "errors"]);
+const props = defineProps(["property", "categories", "images", "files", "prices", "errors", "routePrefix"]);
 
 const values = reactive({
     name: null,
@@ -49,7 +49,6 @@ const form = useForm({
 const propertyFiles = reactive({
     flap: false,
     add: file => {
-        console.log(file);
         propertyFiles.form.file_url = file.url;
         propertyFiles.form.name = file.name;
         propertyFiles.form.property_id = form.id;
@@ -192,6 +191,21 @@ const submit = () => {
         onError: () => store.dispatch("backend/addAlert", {type: "error", message: form.errors})
     });
 };
+
+const categorySlug = computed(() => {
+    if (form.category_id) {
+        const category = props.categories.data.find(category => {
+            return category.id === form.category_id;
+        });
+
+        const typeName = category.type.translations[store.getters["backend/formLocale"]].name;
+        const categoryName = category.translations[store.getters["backend/formLocale"]].name;
+
+        return `${typeName}/${categoryName}/${values.name ? values.name : ""}`.toLowerCase();
+    }
+
+    return "";
+});
 </script>
 <template>
     <!--Title-->
@@ -230,22 +244,22 @@ const submit = () => {
                                   required
                                   translation/>
                     </div>
-	                <div class="mb-6">
+                    <div class="mb-6">
 		                <Textarea v-model="form"
-		                          :errors="errors"
-		                          :label="__('address')"
-		                          name="address"/>
-	                </div>
-	                <div class="mb-6 grid lg:grid-cols-2 gap-4">
-		                <Input v-model="form"
-		                       :errors="errors"
-		                       :label="__('latitude')"
-		                       name="latitude"/>
-		                <Input v-model="form"
-		                       :errors="errors"
-		                       :label="__('longitude')"
-		                       name="longitude"/>
-	                </div>
+                                  :errors="errors"
+                                  :label="__('address')"
+                                  name="address"/>
+                    </div>
+                    <div class="mb-6 grid lg:grid-cols-2 gap-4">
+                        <Input v-model="form"
+                               :errors="errors"
+                               :label="__('latitude')"
+                               name="latitude"/>
+                        <Input v-model="form"
+                               :errors="errors"
+                               :label="__('longitude')"
+                               name="longitude"/>
+                    </div>
                     <div class="mb-6">
                         <div class="mt-1"
                              style="--ck-border-radius: 0.50rem">
@@ -414,10 +428,10 @@ const submit = () => {
         <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-6">
             <span class="text-skin-base font-medium text-lg">{{ __("files") }}</span>
             <InputFile :button-label="__('add_file')"
-                        button-class="btn btn-secondary"
-                        class="flex justify-end"
-                        name="cover"
-                        @change="propertyFiles.add"/>
+                       button-class="btn btn-secondary"
+                       class="flex justify-end"
+                       name="cover"
+                       @change="propertyFiles.add"/>
         </div>
         <div class="text-skin-base
                     border
@@ -509,9 +523,10 @@ const submit = () => {
                  :description="values.summary"
                  :errors="errors?.seo"
                  :image="values.cover"
-                 :image-title="values.cover_title"
                  :image-alt="values.cover_alt"
-                 :locale="selectedLocale"
+                 :image-title="values.cover_title"
+                 :slug="categorySlug"
+                 :slug-prefix="routePrefix"
                  :title="values.name"
                  article-type="blog_entry"
                  page-type="article"/>

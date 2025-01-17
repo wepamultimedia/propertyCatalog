@@ -14,7 +14,7 @@ export default {
 };
 </script>
 <script setup>
-import { reactive, ref } from "vue";
+import {computed, reactive, ref} from "vue";
 import Ckeditor from "@core/Components/Form/Ckeditor.vue";
 import ToggleButton from "@core/Components/Form/ToggleButton.vue";
 import InputImage from "@core/Components/Form/InputImage.vue";
@@ -23,22 +23,22 @@ import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
 import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 import SeoForm from "@core/Components/Backend/SeoForm.vue";
-import { __ } from "@/Vendor/Core/Mixins/translations";
-import { useForm } from "@inertiajs/vue3";
-import { useStore } from "vuex";
+import {__} from "@/Vendor/Core/Mixins/translations";
+import {useForm} from "@inertiajs/vue3";
+import {useStore} from "vuex";
 
-const props = defineProps(["property", "categories", "errors"]);
-
+const props = defineProps(["property", "categories", "errors", "routePrefix"]);
 const values = reactive({
     name: null,
     summary: null,
     cover: null,
     cover_alt: null,
-    cover_title:null
+    cover_title: null
 });
 const selectedLocale = ref();
 const store = useStore();
 const form = useForm({
+    category_id: null,
     translations: {},
     ...props.property.data
 });
@@ -48,8 +48,24 @@ const submit = () => {
         onError: () => store.dispatch("backend/addAlert", {type: "error", message: form.errors})
     });
 };
+
+const categorySlug = computed(() => {
+    if (form.category_id) {
+        const category = props.categories.data.find(category => {
+            return category.id === form.category_id;
+        });
+
+        const typeName = category.type.translations[store.getters["backend/formLocale"]].name;
+        const categoryName = category.translations[store.getters["backend/formLocale"]].name;
+
+        return `${typeName}/${categoryName}/${values.name ? values.name : ""}`.toLowerCase();
+    }
+
+    return "";
+});
 </script>
 <template>
+    {{ categorySlug }}
     <!--Title-->
     <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-4">
         <span class="dark:text-light font-medium text-xl">{{ __("create_title") }}</span>
@@ -67,7 +83,6 @@ const submit = () => {
                 <div class="p-6 col-span-full xl:col-span-8">
                     <div class="mb-6">
                         <Input v-model="form"
-                               v-model:locale="selectedLocale"
                                v-model:value="values.name"
                                :errors="errors"
                                :label="__('name')"
@@ -78,7 +93,6 @@ const submit = () => {
                     </div>
                     <div class="mb-6">
                         <Textarea v-model="form"
-                                  v-model:locale="selectedLocale"
                                   v-model:value="values.summary"
                                   :errors="errors"
                                   :label="__('summary')"
@@ -86,29 +100,29 @@ const submit = () => {
                                   required
                                   translation/>
                     </div>
-	                <div class="mb-6">
+                    <div class="mb-6">
 		                <Textarea v-model="form"
-		                       :errors="errors"
-		                       :label="__('address')"
-		                       name="address"/>
-	                </div>
-	                <div class="mb-6 grid lg:grid-cols-2 gap-4">
-		                <Input v-model="form"
-		                       :errors="errors"
-		                       :label="__('latitude')"
-		                       name="latitude"/>
-		                <Input v-model="form"
-		                       :errors="errors"
-		                       :label="__('longitude')"
-		                       name="longitude"/>
-	                </div>
+                                  :errors="errors"
+                                  :label="__('address')"
+                                  name="address"/>
+                    </div>
+                    <div class="mb-6 grid lg:grid-cols-2 gap-4">
+                        <Input v-model="form"
+                               :errors="errors"
+                               :label="__('latitude')"
+                               name="latitude"/>
+                        <Input v-model="form"
+                               :errors="errors"
+                               :label="__('longitude')"
+                               name="longitude"/>
+                    </div>
                     <div class="mb-6">
                         <div class="mt-1"
                              style="--ck-border-radius: 0.50rem">
                             <Ckeditor v-model="form"
-                                      v-model:locale="selectedLocale"
                                       :errors="errors"
                                       :label="__('data_sheet')"
+                                      debug
                                       name="data_sheet"
                                       required
                                       translation></Ckeditor>
@@ -153,7 +167,7 @@ const submit = () => {
                                     :label="__('select_category')"
                                     :options="categories.data"
                                     name="category_id"
-                                    option-label="name"
+                                    option-label="label"
                                     reduce
                                     required></Select>
                         </div>
@@ -182,9 +196,9 @@ const submit = () => {
                         </div>
                         <div class="sm:w-1/2 lg:w-full mb-6">
                             <InputImage v-model="form.cover"
-                                        v-model:url="values.cover"
                                         v-model:alt_name="values.cover_alt"
                                         v-model:title="values.cover_title"
+                                        v-model:url="values.cover"
                                         :errors="errors"
                                         :label="__('cover_image')"
                                         name="cover"/>
@@ -208,7 +222,7 @@ const submit = () => {
                 </div>
             </div>
         </div>
-
+        {{ values.name }}
         <!-- seo -->
         <div class="my-8">
             <h2 class="font mb-4">{{ __("seo") }}</h2>
@@ -216,9 +230,10 @@ const submit = () => {
                      :description="values.summary"
                      :errors="errors?.seo"
                      :image="values.cover"
-                     :image-title="values.cover_title"
                      :image-alt="values.cover_alt"
-                     :locale="selectedLocale"
+                     :image-title="values.cover_title"
+                     :slug="categorySlug"
+                     :slug-prefix="routePrefix"
                      :title="values.name"
                      article-type="blog_entry"
                      autocomplete

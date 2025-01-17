@@ -45,8 +45,10 @@ class PropertyController extends InertiaController
         $images = PropertyImageResource::collection($property->images);
         $files = PropertyFileResource::collection($property->files);
 
+        $routePrefix = config('property-catalog.routes.properties_slug_prefix');
+
         return $this->render('Vendor/PropertyCatalog/Backend/Property/Edit', ['core::seo', 'property'],
-            compact(['property', 'categories', 'images', 'files', 'prices']));
+            compact(['property', 'categories', 'images', 'files', 'prices', 'routePrefix']));
     }
 
     public function index(Request $request): Response
@@ -142,10 +144,11 @@ class PropertyController extends InertiaController
      */
     public function create(): Response
     {
-        $categories = CategoryResource::collection(Category::all());
+        $categories = CategoryResource::collection(Category::orderBy('type_id')->get());
         $property = PropertyResource::make(new Property);
+        $routePrefix = config('property-catalog.routes.properties_slug_prefix');
 
-        return $this->render('Vendor/PropertyCatalog/Backend/Property/Create', ['core::seo', 'property'],
-            compact(['property', 'categories']));
+        return $this->render('Vendor/PropertyCatalog/Backend/Property/Create', ['core::seo', 'category', 'property'],
+            compact(['property', 'categories', 'routePrefix']));
     }
 }

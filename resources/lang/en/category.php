@@ -8,4 +8,5 @@ return [
     'edit_title' => 'Edit category',
     'edit_summary' => 'Modify the category by modifying the fields, note that it is important to check that the SEO information is also modified if necessary.',
     'published' => 'Published',
+    'types' => 'Types of categories',
 ];

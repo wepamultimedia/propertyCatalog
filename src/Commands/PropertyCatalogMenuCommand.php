@@ -15,6 +15,8 @@ class PropertyCatalogMenuCommand extends Command
     {
         Menu::loadPackageItems('property-catalog');
 
+        $this->call('cache:clear');
+
         return self::SUCCESS;
     }
 }

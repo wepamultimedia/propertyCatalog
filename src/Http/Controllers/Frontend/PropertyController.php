@@ -17,6 +17,11 @@ class PropertyController extends InertiaController
     public function index(Request $request): Response
     {
         $properties = Property::where('published', true)
+            ->when($request->type_id, function ($query, $type_id) {
+                $query->whereHas('category', function ($query) use ($type_id) {
+                    $query->where('type_id', $type_id);
+                });
+            })
             ->when($request->category_id, function ($query, $category_id) {
                 $query->where('category_id', $category_id);
             })
@@ -25,6 +30,8 @@ class PropertyController extends InertiaController
             })
             ->orderBy('position', 'desc')
             ->paginate();
+
+        dd($properties->toArray());
 
         $properties = PropertyResource::collection($properties);
         $category = null;
