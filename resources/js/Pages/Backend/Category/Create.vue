@@ -44,7 +44,7 @@ const typeName = computed(() => {
     if (!form.type_id)
         return "";
     else
-        return __(props.types.find(type => type.id === form.type_id).name);
+        return __(props.types.data.find(type => type.id === form.type_id).name);
 });
 const submit = () => {
     form.post(route("admin.property_catalog.categories.store"), {
@@ -70,7 +70,7 @@ const submit = () => {
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                             <Select v-model="form.type_id"
                                     :label="__('type')"
-                                    :options="types.map(type => { return { id:type.id, label: type.name }})"
+                                    :options="types.data.map(type => { return { id:type.id, label: type.name }})"
                                     translate-label></Select>
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
@@ -80,7 +80,6 @@ const submit = () => {
                                    :label="__('name')"
                                    autofocus
                                    name="name"
-                                   debug
                                    translation/>
                         </div>
                         <div class="col-span-6 mb-6">

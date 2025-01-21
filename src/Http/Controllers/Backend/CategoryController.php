@@ -39,7 +39,6 @@ class CategoryController extends InertiaController
     {
         $category = CategoryResource::make($category);
         $types = TypeResource::collection(Type::all());
-
         $routePrefix = config('property-catalog.routes.categories_slug_prefix');
 
         return $this->render('Vendor/PropertyCatalog/Backend/Category/Edit', ['core::seo', 'category'],
@@ -111,7 +110,7 @@ class CategoryController extends InertiaController
     public function create(): Response
     {
         $category = CategoryResource::make(new Category);
-        $types = Category::$TYPES;
+        $types = TypeResource::collection(Type::all());
         $routePrefix = config('property-catalog.routes.categories_slug_prefix');
 
         return $this->render('Vendor/PropertyCatalog/Backend/Category/Create', ['core::seo', 'category'],
